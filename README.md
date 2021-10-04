@@ -1,2 +1,3 @@
 # ShooterRogueLite
-Rogue lite game with shooter mechanics
+
+This is a simple shooter game with rogue lite mechanics.
