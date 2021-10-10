@@ -30,7 +30,7 @@ void USAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	if (!ensure(CharacterOwner)) return;
+	if (!CharacterOwner) return;
 
 	FVector Velocity = CharacterOwner->GetVelocity();
 

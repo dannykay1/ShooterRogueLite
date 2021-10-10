@@ -8,6 +8,7 @@
 
 class UCameraComponent;
 class USkeletalMeshComponent;
+class USInteractionComponent;
 
 UCLASS()
 class SHOOTERROGUELITE_API ASCharacter : public ACharacter
@@ -28,6 +29,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Components)
 	USkeletalMeshComponent* Mesh1P;
 
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Components)
+	USInteractionComponent* InteractionComponent;
+	
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 

@@ -3,6 +3,7 @@
 
 #include "Player/SCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/SInteractionComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 
 
@@ -21,6 +22,8 @@ ASCharacter::ASCharacter()
 	Mesh1P->SetupAttachment(CameraComponent);
 	Mesh1P->SetRelativeLocation(FVector(0.f, 0.f, -130.f));
 	Mesh1P->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+
+	InteractionComponent = CreateDefaultSubobject<USInteractionComponent>(TEXT("InteractionComponent"));
 }
 
 // Called when the game starts or when spawned
