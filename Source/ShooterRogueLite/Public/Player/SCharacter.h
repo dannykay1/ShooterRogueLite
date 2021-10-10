@@ -1,34 +1,31 @@
-// Copyright Danny Kay 2021
+﻿// Copyright Danny Kay 2021
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "ShooterCharacter.generated.h"
+#include "SCharacter.generated.h"
 
 class UCameraComponent;
 class USkeletalMeshComponent;
 
-/*
- *	Player character.
- */
 UCLASS()
-class SHOOTERROGUELITE_API AShooterCharacter : public ACharacter
+class SHOOTERROGUELITE_API ASCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
+	
 public:
 	// Sets default values for this character's properties
-	AShooterCharacter();
+	ASCharacter();
 
-protected:
+	protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, Category = Components)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Components)
 	UCameraComponent* CameraComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = Components)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Components)
 	USkeletalMeshComponent* Mesh1P;
 
 	void MoveForward(float Value);
@@ -40,4 +37,10 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE UCameraComponent* GetCameraComponent() const { return CameraComponent; }
+
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 };

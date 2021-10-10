@@ -4,21 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
-#include "ShooterAnimInstance.generated.h"
-
-class ACharacter;
+#include "SAnimInstance.generated.h"
 
 /**
- * Base class for all characters with animations.
+ * 
  */
 UCLASS()
-class SHOOTERROGUELITE_API UShooterAnimInstance : public UAnimInstance
+class SHOOTERROGUELITE_API USAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 
 public:
 	/* Sets all default values. */
-	UShooterAnimInstance();
+	USAnimInstance();
 
 	/* Performs initialization. */
 	virtual void NativeInitializeAnimation() override;

@@ -1,13 +1,13 @@
 ﻿// Copyright Danny Kay 2021
 
 
-#include "Animation/ShooterAnimInstance.h"
+#include "Animation/SAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Character.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
-UShooterAnimInstance::UShooterAnimInstance()
+USAnimInstance::USAnimInstance()
 {
 	bIsMoving = false;
 	bIsTargeting = false;
@@ -15,7 +15,7 @@ UShooterAnimInstance::UShooterAnimInstance()
 	Direction = 0.0f;
 }
 
-void UShooterAnimInstance::NativeInitializeAnimation()
+void USAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
 
@@ -26,7 +26,7 @@ void UShooterAnimInstance::NativeInitializeAnimation()
 	}
 }
 
-void UShooterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
+void USAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 

@@ -1,15 +1,15 @@
-// Copyright Danny Kay 2021
+﻿// Copyright Danny Kay 2021
 
 
-#include "Player/ShooterCharacter.h"
+#include "Player/SCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 
 
 // Sets default values
-AShooterCharacter::AShooterCharacter()
+ASCharacter::ASCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
@@ -24,24 +24,24 @@ AShooterCharacter::AShooterCharacter()
 }
 
 // Called when the game starts or when spawned
-void AShooterCharacter::BeginPlay()
+void ASCharacter::BeginPlay()
 {
 	Super::BeginPlay();	
 }
 
 // Called every frame
-void AShooterCharacter::Tick(float DeltaTime)
+void ASCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
 // Called to bind functionality to input
-void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &AShooterCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AShooterCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("MoveForward", this, &ASCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ASCharacter::MoveRight);
 
 	PlayerInputComponent->BindAxis("LookUp", this, &ACharacter::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("Turn", this, &ACharacter::AddControllerYawInput);
@@ -50,12 +50,12 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);	
 }
 
-void AShooterCharacter::MoveForward(float Value)
+void ASCharacter::MoveForward(float Value)
 {
 	AddMovementInput(GetActorForwardVector(), Value);
 }
 
-void AShooterCharacter::MoveRight(float Value)
+void ASCharacter::MoveRight(float Value)
 {
 	AddMovementInput(GetActorRightVector(), Value);
 }
