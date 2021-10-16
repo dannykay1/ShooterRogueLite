@@ -2,8 +2,9 @@
 
 
 #include "Components/SInteractionComponent.h"
+#include "Components/SInteractionWidgetComponent.h"
 #include "DrawDebugHelpers.h"
-#include "Framework/SInteractableInterface.h"
+#include "Player/SCharacter.h"
 
 
 // Sets default values for this component's properties
@@ -13,68 +14,195 @@ USInteractionComponent::USInteractionComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
-}
+	LastInteractionCheckTime = 0.f;
+	bInteractHeld = false;
 
+	InteractionCheckFrequency = 0.1f;
+	InteractionCheckDistance = 1000.f;
+	InteractionCheckRadius = 10.f;
+}
 
 // Called when the game starts
 void USInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	CharacterOwner = Cast<ASCharacter>(GetOwner());
 }
 
-
 // Called every frame
-void USInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                           FActorComponentTickFunction* ThisTickFunction)
+void USInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (GetWorld()->TimeSince(LastInteractionCheckTime) > InteractionCheckFrequency)
+	{
+		PerformInteractionCheck();
+	}
 }
 
-void USInteractionComponent::Interact()
+void USInteractionComponent::PerformInteractionCheck()
 {
+	if (!CharacterOwner) return;
+
+	LastInteractionCheckTime = GetWorld()->GetTimeSeconds();
+
 	FCollisionObjectQueryParams QueryParams;
 	QueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
-
-	AActor* MyOwner = GetOwner();
 
 	FVector EyeLocation;
 	FRotator EyeRotation;
 
-	MyOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
+	CharacterOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
 
-	FVector End = EyeLocation + (EyeRotation.Vector() * 1000.f);
+	FVector End = EyeLocation + (EyeRotation.Vector() * InteractionCheckDistance);
 
-	TArray<FHitResult> Hits;
+	FHitResult Hit;
 
-	float Radius = 30.f;
 	FCollisionShape Shape;
-	Shape.SetSphere(Radius);
+	Shape.SetSphere(InteractionCheckRadius);
 
-	bool bBlockingHit = GetWorld()->SweepMultiByObjectType(Hits, EyeLocation, End, FQuat::Identity, QueryParams, Shape);
+	bool bBlockingHit = GetWorld()->SweepSingleByObjectType(Hit, EyeLocation, End, FQuat::Identity, QueryParams, Shape);
 
-	FColor LineColor = bBlockingHit ? FColor::Green : FColor::Red;
-	
-	for (FHitResult Hit : Hits)
+	FColor LineColor = FColor::Red;
+
+	if (bBlockingHit && Hit.GetActor())
 	{
-		if (AActor* HitActor = Hit.GetActor())
+		if (USInteractionWidgetComponent* Interactable = Cast<USInteractionWidgetComponent>(Hit.GetActor()->GetComponentByClass(USInteractionWidgetComponent::StaticClass())))
 		{
-			if (HitActor->Implements<USInteractableInterface>())
-			{
-				if (APawn* MyPawn = Cast<APawn>(MyOwner))
-				{
-					ISInteractableInterface::Execute_Interact(HitActor, MyPawn);
-					break;
-				}
-			}
-		}
+			float Distance = Hit.Distance;
+			float InteractionDistance = Interactable->InteractionDistance;
 
-		DrawDebugSphere(GetWorld(), Hit.ImpactPoint, Radius, 32, LineColor, false, 2.f);
+			if (Interactable != GetInteractable() && Distance <= InteractionDistance)
+			{
+				FoundNewInteractable(Interactable);
+			}
+			else if (GetInteractable() && Distance > InteractionDistance)
+			{
+				CouldntFindInteractable();
+			}
+
+			LineColor = FColor::Green;
+			//DrawDebugSphere(GetWorld(), Hit.ImpactPoint, InteractionCheckRadius, 32, LineColor, false, 2.f);
+
+			return;
+		}
 	}
 
-	DrawDebugLine(GetWorld(), EyeLocation, End, LineColor, false, 2.f, 0, 2.f);
+	CouldntFindInteractable();
+
+	//DrawDebugLine(GetWorld(), EyeLocation, End, LineColor, false, 2.f, 0, 2.f);
+}
+
+void USInteractionComponent::CouldntFindInteractable()
+{
+	if (!ensure(CharacterOwner))
+	{
+		return;
+	}
+
+	if (CharacterOwner->GetWorldTimerManager().IsTimerActive(TimerHandle_Interact))
+	{
+		CharacterOwner->GetWorldTimerManager().ClearTimer(TimerHandle_Interact);
+	}
+
+	if (USInteractionWidgetComponent* Interactable = GetInteractable())
+	{
+		Interactable->EndFocus(CharacterOwner);
+
+		if (bInteractHeld)
+		{
+			EndInteract();
+		}
+	}
+
+	ViewedInteractionComponent = nullptr;
+}
+
+void USInteractionComponent::FoundNewInteractable(USInteractionWidgetComponent* Interactable)
+{
+	EndInteract();
+
+	if (USInteractionWidgetComponent* OldInteractable = GetInteractable())
+	{
+		OldInteractable->EndFocus(CharacterOwner);
+	}
+
+	ViewedInteractionComponent = Interactable;
+	Interactable->BeginFocus(CharacterOwner);
+}
+
+void USInteractionComponent::BeginInteract()
+{
+	bInteractHeld = true;
+
+	if (USInteractionWidgetComponent* Interactable = GetInteractable())
+	{
+		Interactable->BeginInteract(CharacterOwner);
+
+		float InteractionTime = Interactable->InteractionTime;
+
+		if (FMath::IsNearlyZero(InteractionTime))
+		{
+			Interact();
+		}
+		else
+		{
+			CharacterOwner->GetWorldTimerManager().SetTimer(TimerHandle_Interact, this, &USInteractionComponent::Interact, InteractionTime, false);
+		}
+	}
+}
+
+void USInteractionComponent::EndInteract()
+{
+	if (!ensure(CharacterOwner))
+	{
+		return;
+	}
+	
+	bInteractHeld = false;
+
+	CharacterOwner->GetWorldTimerManager().ClearTimer(TimerHandle_Interact);
+
+	if (USInteractionWidgetComponent* Interactable = GetInteractable())
+	{
+		Interactable->EndInteract(CharacterOwner);
+	}
+}
+
+bool USInteractionComponent::IsInteracting() const
+{
+	if (!ensure(CharacterOwner))
+	{
+		return false;
+	}
+	
+	return CharacterOwner->GetWorldTimerManager().IsTimerActive(TimerHandle_Interact);
+}
+
+float USInteractionComponent::GetRemainingInteractionTime() const
+{
+	if (!ensure(CharacterOwner))
+	{
+		return 0.f;
+	}
+	
+	return IsInteracting()
+	       ? CharacterOwner->GetWorldTimerManager().GetTimerRemaining(TimerHandle_Interact)
+	       : 0.f;
+}
+
+void USInteractionComponent::Interact()
+{
+	if (!ensure(CharacterOwner))
+	{
+		return;
+	}
+	
+	CharacterOwner->GetWorldTimerManager().ClearTimer(TimerHandle_Interact);
+
+	if (USInteractionWidgetComponent* Interactable = GetInteractable())
+	{
+		Interactable->Interact(CharacterOwner);
+	}
 }

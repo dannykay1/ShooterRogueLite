@@ -35,6 +35,9 @@ public:
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
+	void BeginInteract();
+	void EndInteract();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
