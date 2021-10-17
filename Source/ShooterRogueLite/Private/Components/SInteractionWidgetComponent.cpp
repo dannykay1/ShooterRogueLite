@@ -18,7 +18,7 @@ USInteractionWidgetComponent::USInteractionWidgetComponent()
 	InteractableActionText = FText::FromString("Interact");
 
 	Space = EWidgetSpace::Screen;
-	DrawSize = FIntPoint(400, 100);
+	DrawSize = FIntPoint(600, 100);
 	bDrawAtDesiredSize = true;
 
 	SetActive(true);
@@ -63,12 +63,12 @@ void USInteractionWidgetComponent::SetInteractableActionText(const FText& NewAct
 
 float USInteractionWidgetComponent::GetInteractPercentage() const
 {
-	if (!ensure(Interactor))
+	if (!Interactor)
 		return 0.f;
 	
 	USInteractionComponent* InteractionComponent = Cast<USInteractionComponent>(Interactor->GetComponentByClass(USInteractionComponent::StaticClass()));
 
-	if(!ensure(InteractionComponent))
+	if(!InteractionComponent)
 		return 0.f;
 
 	return 1.f - FMath::Abs(InteractionComponent->GetRemainingInteractionTime() / InteractionTime);
@@ -95,6 +95,8 @@ void USInteractionWidgetComponent::BeginFocus(ASCharacter* Character)
 			Prim->SetRenderCustomDepth(true);
 		}
 	}
+	
+	RefreshWidget();
 }
 
 void USInteractionWidgetComponent::EndFocus(ASCharacter* Character)

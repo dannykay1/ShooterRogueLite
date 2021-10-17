@@ -6,4 +6,6 @@
 
 void USInteractionWidget::UpdateInteractionWidget(USInteractionWidgetComponent* InteractionComponent)
 {
+    OwningInteractionComponent = InteractionComponent;
+    OnUpdateInteractionWidget();
 }
