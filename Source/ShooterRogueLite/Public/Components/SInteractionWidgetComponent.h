@@ -6,13 +6,13 @@
 #include "Components/WidgetComponent.h"
 #include "SInteractionWidgetComponent.generated.h"
 
-class ASCharacter;
+class ASPlayerCharacter;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBeginInteract, ASCharacter*, Player);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEndInteract, ASCharacter*, Player);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBeginFocus, ASCharacter*, Player);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEndFocus, ASCharacter*, Player);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInteract, ASCharacter*, Player);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBeginInteract, ASPlayerCharacter*, Player);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEndInteract, ASPlayerCharacter*, Player);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBeginFocus, ASPlayerCharacter*, Player);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEndFocus, ASPlayerCharacter*, Player);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInteract, ASPlayerCharacter*, Player);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class SHOOTERROGUELITE_API USInteractionWidgetComponent : public UWidgetComponent
@@ -66,15 +66,15 @@ public:
 	FOnInteract OnInteract;	
 
 	/* Called when the player interaction check trace begins/ends hitting the item. */
-	void BeginFocus(ASCharacter* Character);
-	void EndFocus(ASCharacter* Character);
+	void BeginFocus(ASPlayerCharacter* Character);
+	void EndFocus(ASPlayerCharacter* Character);
 
 	/* Called when the player begins/end interaction with the item. */
-	void BeginInteract(ASCharacter* Character);
-	void EndInteract(ASCharacter* Character);
+	void BeginInteract(ASPlayerCharacter* Character);
+	void EndInteract(ASPlayerCharacter* Character);
 
 	/* Called when interacting with an item. */
-	void Interact(ASCharacter* Character);
+	void Interact(ASPlayerCharacter* Character);
 
 	/* Return a normalize value (0-1) denoting how far through the interact player is. */
 	UFUNCTION(BlueprintPure, Category = Interaction)
@@ -84,7 +84,7 @@ protected:
 	/* Called when game starts. */
 	virtual  void Deactivate() override;
 
-	bool CanInteract(ASCharacter* Character) const;
+	bool CanInteract(ASPlayerCharacter* Character) const;
 
-	ASCharacter* Interactor;
+	ASPlayerCharacter* Interactor;
 };

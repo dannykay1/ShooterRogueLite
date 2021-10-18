@@ -3,21 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-#include "SCharacter.generated.h"
+#include "Pawns/SCharacter.h"
+#include "SPlayerCharacter.generated.h"
 
 class UCameraComponent;
 class USkeletalMeshComponent;
 class USInteractionComponent;
 
 UCLASS()
-class SHOOTERROGUELITE_API ASCharacter : public ACharacter
+class SHOOTERROGUELITE_API ASPlayerCharacter : public ASCharacter
 {
 	GENERATED_BODY()
 	
 public:
 	// Sets default values for this character's properties
-	ASCharacter();
+	ASPlayerCharacter();
+
+	/* Initialize the Mesh1P as abilities skeletal mesh component. */
+	virtual void PossessedBy(AController* NewController) override;
 
 protected:
 	// Called when the game starts or when spawned

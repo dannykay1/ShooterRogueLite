@@ -1,14 +1,15 @@
 ﻿// Copyright Danny Kay 2021
 
 
-#include "Player/SCharacter.h"
+#include "Player/SPlayerCharacter.h"
+#include "Abilities/SAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SInteractionComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 
 
 // Sets default values
-ASCharacter::ASCharacter()
+ASPlayerCharacter::ASPlayerCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -26,25 +27,32 @@ ASCharacter::ASCharacter()
 	InteractionComponent = CreateDefaultSubobject<USInteractionComponent>(TEXT("InteractionComponent"));
 }
 
+void ASPlayerCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	AbilitySystemComponent->AbilityActorInfo->SkeletalMeshComponent = Mesh1P;
+}
+
 // Called when the game starts or when spawned
-void ASCharacter::BeginPlay()
+void ASPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();	
 }
 
 // Called every frame
-void ASCharacter::Tick(float DeltaTime)
+void ASPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
 // Called to bind functionality to input
-void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ASPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &ASCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ASCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("MoveForward", this, &ASPlayerCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ASPlayerCharacter::MoveRight);
 
 	PlayerInputComponent->BindAxis("LookUp", this, &ACharacter::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("Turn", this, &ACharacter::AddControllerYawInput);
@@ -52,26 +60,26 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ASCharacter::BeginInteract);
-	PlayerInputComponent->BindAction("Interact", IE_Released, this, &ASCharacter::EndInteract);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ASPlayerCharacter::BeginInteract);
+	PlayerInputComponent->BindAction("Interact", IE_Released, this, &ASPlayerCharacter::EndInteract);
 }
 
-void ASCharacter::MoveForward(float Value)
+void ASPlayerCharacter::MoveForward(float Value)
 {
 	AddMovementInput(GetActorForwardVector(), Value);
 }
 
-void ASCharacter::MoveRight(float Value)
+void ASPlayerCharacter::MoveRight(float Value)
 {
 	AddMovementInput(GetActorRightVector(), Value);
 }
 
-void ASCharacter::BeginInteract()
+void ASPlayerCharacter::BeginInteract()
 {
 	InteractionComponent->BeginInteract();
 }
 
-void ASCharacter::EndInteract()
+void ASPlayerCharacter::EndInteract()
 {
 	InteractionComponent->EndInteract();
 }
