@@ -2,8 +2,6 @@
 
 
 #include "Weapons/SWeapon.h"
-#include "Abilities/SAbilitySystemComponent.h"
-#include "Abilities/SGameplayAbility.h"
 #include "Components/SInteractionWidgetComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 
@@ -47,19 +45,6 @@ void ASWeapon::AddAbilities()
 	AActor* MyOwner = GetOwner();
 	if (!ensure(MyOwner))
 		return;
-
-	USAbilitySystemComponent* ASC = Cast<USAbilitySystemComponent>(MyOwner->GetComponentByClass(USAbilitySystemComponent::StaticClass()));
-	if (!ensure(ASC))
-		return;
-
-	for (TSubclassOf<USGameplayAbility> Ability : AbilitiesToGive)
-	{
-		if (Ability)
-		{
-			FGameplayAbilitySpecHandle Handle = ASC->GiveAbility(FGameplayAbilitySpec(Ability, 1, static_cast<int32>(Ability.GetDefaultObject()->InputID), this));
-			AbilitySpecHandles.Add(Handle);
-		}
-	}
 }
 
 void ASWeapon::RemoveAbilities()
@@ -67,13 +52,4 @@ void ASWeapon::RemoveAbilities()
 	AActor* MyOwner = GetOwner();
 	if (!ensure(MyOwner))
 		return;
-
-	USAbilitySystemComponent* ASC = Cast<USAbilitySystemComponent>(MyOwner->GetComponentByClass(USAbilitySystemComponent::StaticClass()));
-	if (!ensure(ASC))
-		return;
-
-	for (FGameplayAbilitySpecHandle& Handle : AbilitySpecHandles)
-	{
-		ASC->ClearAbility(Handle);
-	}
 }

@@ -4,14 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "AbilitySystemInterface.h"
 #include "SCharacter.generated.h"
 
-class USAbilitySystemComponent;
-class USAttributeSet;
-
 UCLASS()
-class SHOOTERROGUELITE_API ASCharacter : public ACharacter, public IAbilitySystemInterface
+class SHOOTERROGUELITE_API ASCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -21,18 +17,7 @@ public:
 
 	/** Initialize AbilitySystemComponent */
 	virtual void PossessedBy(AController* NewController) override;
-
-protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
-	USAbilitySystemComponent* AbilitySystemComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
-	USAttributeSet* AttributeSet;
-
-public:
+	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	// Implement IAbilitySystemInterface
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 };

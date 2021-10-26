@@ -2,7 +2,6 @@
 
 
 #include "Player/SPlayerCharacter.h"
-#include "Abilities/SAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SInteractionComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -30,8 +29,6 @@ ASPlayerCharacter::ASPlayerCharacter()
 void ASPlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-
-	AbilitySystemComponent->AbilityActorInfo->SkeletalMeshComponent = Mesh1P;
 }
 
 // Called when the game starts or when spawned

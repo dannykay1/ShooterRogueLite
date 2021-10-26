@@ -4,12 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GameplayAbilitySpec.h"
 #include "SWeapon.generated.h"
 
 class USkeletalMeshComponent;
 class USInteractionWidgetComponent;
-class USGameplayAbility;
 
 UCLASS()
 class SHOOTERROGUELITE_API ASWeapon : public AActor
@@ -37,14 +35,6 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Sockets)
 	FName LeftHandSocketName;
-
-	/* Abilities to give to owning AbilitySystemComponent. */
-	UPROPERTY(EditDefaultsOnly, Category = Abilities)
-	TArray<TSubclassOf<USGameplayAbility>> AbilitiesToGive;
-
-	/** Used to remove abilities from owner once unequipped */
-	UPROPERTY(BlueprintReadOnly, Category = Abilities)
-	TArray<FGameplayAbilitySpecHandle> AbilitySpecHandles;
 
 public:
 	/* Gets the Sight socket on the weapon mesh, used for player 1st person animations. */
