@@ -14,7 +14,7 @@ UCLASS()
 class SHOOTERROGUELITE_API ASPlayerCharacter : public ASCharacter
 {
 	GENERATED_BODY()
-	
+
 public:
 	// Sets default values for this character's properties
 	ASPlayerCharacter();
@@ -34,20 +34,20 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Components)
 	USInteractionComponent* InteractionComponent;
-	
+
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
 	void BeginInteract();
 	void EndInteract();
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
+
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE UCameraComponent* GetCameraComponent() const { return CameraComponent; }
 

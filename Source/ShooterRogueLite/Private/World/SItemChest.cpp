@@ -27,8 +27,3 @@ void ASItemChest::BeginPlay()
 {
 	Super::BeginPlay();
 }
-
-void ASItemChest::Interact_Implementation(APawn* InstigatorPawn)
-{
-
-}

@@ -20,7 +20,7 @@ enum class EAbilityInputID : uint8
 	// 5 PrimaryFire
 	PrimaryFire			UMETA(DisplayName = "Primary Fire"),
 	// 6 ADS
-	Aim					UMETA(DisplayName = "Aim Down Sights"),
+	AimDownSights		UMETA(DisplayName = "Aim Down Sights"),
 	// 7 Reload
 	Reload				UMETA(DisplayName = "Reload"),
 	// 8 NextWeapon

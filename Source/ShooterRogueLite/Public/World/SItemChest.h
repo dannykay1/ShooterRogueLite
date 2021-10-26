@@ -3,22 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Framework/SInteractableInterface.h"
 #include "GameFramework/Actor.h"
 #include "SItemChest.generated.h"
 
 class UStaticMeshComponent;
 
 UCLASS()
-class SHOOTERROGUELITE_API ASItemChest : public AActor, public ISInteractableInterface
+class SHOOTERROGUELITE_API ASItemChest : public AActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
 	ASItemChest();
-
-	virtual void Interact_Implementation(APawn* InstigatorPawn) override;
 
 protected:
 	// Called when the game starts or when spawned

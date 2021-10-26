@@ -40,11 +40,11 @@ void USAbilitySystemComponent::BindASCInput(UInputComponent* InputComponent)
 		bInputBound = true;
 
 		BindAbilityActivationToInputComponent(InputComponent,
-		FGameplayAbilityInputBinds(
-		FString("Confirm"),
-		FString("Cancel"),
-		FString("EAbilityInputID"),
-		static_cast<int32>(EAbilityInputID::Confirm),
-		static_cast<int32>(EAbilityInputID::Cancel)));
+            FGameplayAbilityInputBinds(
+                FString("Confirm"),
+                FString("Cancel"),
+                FString("EAbilityInputID"),
+                static_cast<int32>(EAbilityInputID::Confirm),
+                static_cast<int32>(EAbilityInputID::Cancel)));
 	}
 }
