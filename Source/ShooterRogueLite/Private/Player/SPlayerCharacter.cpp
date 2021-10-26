@@ -2,6 +2,8 @@
 
 
 #include "Player/SPlayerCharacter.h"
+#include "Actions/SActionComponent.h"
+#include "Actions/SAttributeComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SInteractionComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -24,6 +26,9 @@ ASPlayerCharacter::ASPlayerCharacter()
 	Mesh1P->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 
 	InteractionComponent = CreateDefaultSubobject<USInteractionComponent>(TEXT("InteractionComponent"));
+
+	ActionComponent = CreateDefaultSubobject<USActionComponent>(TEXT("ActionComponent"));
+	AttributeComponent = CreateDefaultSubobject<USAttributeComponent>(TEXT("AttributeComponent"));
 }
 
 void ASPlayerCharacter::PossessedBy(AController* NewController)

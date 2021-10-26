@@ -3,15 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Pawns/SCharacter.h"
+#include "GameFramework/Character.h"
 #include "SPlayerCharacter.generated.h"
 
 class UCameraComponent;
 class USkeletalMeshComponent;
 class USInteractionComponent;
+class USActionComponent;
+class USAttributeComponent;
 
 UCLASS()
-class SHOOTERROGUELITE_API ASPlayerCharacter : public ASCharacter
+class SHOOTERROGUELITE_API ASPlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -34,6 +36,12 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Components)
 	USInteractionComponent* InteractionComponent;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Components)
+	USActionComponent* ActionComponent;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Components)
+	USAttributeComponent* AttributeComponent;
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
