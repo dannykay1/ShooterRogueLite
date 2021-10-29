@@ -30,3 +30,27 @@ enum class EAbilityInputID : uint8
 	// 10 Interact
 	Interact			UMETA(DisplayName = "Interact")
 };
+
+// USTRUCT(BlueprintType)
+// struct SHOOTERROGUELITE_API FActorInfo
+// {
+// 	GENERATED_BODY()
+//
+// 	UPROPERTY(BlueprintReadOnly)
+// 	class AActor* OwnerActor;
+// 	
+// 	UPROPERTY(BlueprintReadOnly)
+// 	class AController* Controller;
+// 	
+// 	UPROPERTY(BlueprintReadOnly)
+// 	class USActionComponent* ActionComponent;
+//
+// 	UPROPERTY(BlueprintReadOnly)
+// 	class USkeletalMeshComponent* SkeletalMeshComponent;
+//
+// 	UPROPERTY(BlueprintReadOnly)
+// 	class UAnimInstance* AnimInstance;
+//
+// 	UPROPERTY(BlueprintReadOnly)
+// 	class UCharacterMovementComponent* MovementComponent;
+// };

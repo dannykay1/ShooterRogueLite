@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "SPlayerCharacter.generated.h"
+#include "SCharacter.generated.h"
 
 class UCameraComponent;
 class USkeletalMeshComponent;
@@ -13,13 +13,13 @@ class USActionComponent;
 class USAttributeComponent;
 
 UCLASS()
-class SHOOTERROGUELITE_API ASPlayerCharacter : public ACharacter
+class SHOOTERROGUELITE_API ASCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	ASPlayerCharacter();
+	ASCharacter();
 
 	/* Initialize the Mesh1P as abilities skeletal mesh component. */
 	virtual void PossessedBy(AController* NewController) override;
@@ -61,4 +61,7 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
+
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE USActionComponent* GetActionComponent() const { return ActionComponent; }
 };

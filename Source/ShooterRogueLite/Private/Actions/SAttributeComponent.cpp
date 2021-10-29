@@ -9,7 +9,6 @@ USAttributeComponent::USAttributeComponent()
 {
 }
 
-
 // Called when the game starts
 void USAttributeComponent::BeginPlay()
 {
@@ -20,7 +19,6 @@ void USAttributeComponent::BeginPlay()
 		Pair.Value.Initialize();
 	}
 }
-
 
 // Called every frame
 void USAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -36,6 +34,7 @@ bool USAttributeComponent::ModifyAttribute(FGameplayTag Tag, float Delta, FAttri
 		{
 			Pair.Value.ModifyValue(Delta);
 			Attribute = Pair.Value;
+			OnAttributeChanged.Broadcast(Tag, Pair.Value);
 			return true;
 		}
 	}

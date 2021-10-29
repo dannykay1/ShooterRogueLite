@@ -5,8 +5,10 @@
 #include "Actions/SActionComponent.h"
 #include "GameFramework/Actor.h"
 
+
 USAction::USAction()
 {
+	bIsRunning = false;
 }
 
 void USAction::Initialize(USActionComponent* NewActionComp)
@@ -14,9 +16,33 @@ void USAction::Initialize(USActionComponent* NewActionComp)
 	ActionComp = NewActionComp;
 }
 
-USActionComponent* USAction::GetOwningComponent() const
+UWorld* USAction::GetWorld() const
 {
-	return ActionComp;
+	AActor* Actor = Cast<AActor>(GetOuter());
+
+	if (!ensure(Actor))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No Outer!"));
+	}
+
+	return Actor ? Actor->GetWorld() : nullptr;
+}
+
+bool USAction::CanActivateAction(AActor* Instigator)
+{
+	if (GetIsRunning())
+	{
+		return false;
+	}
+	
+	USActionComponent* Comp = GetOwningComponent();
+
+	return !Comp->ActiveGameplayTags.HasAny(BlockAbilitiesWithTag) && CanStart(Instigator);
+}
+
+bool USAction::CanStart_Implementation(AActor* Instigator)
+{
+	return true;
 }
 
 void USAction::StartAction(AActor* Instigator)
@@ -24,13 +50,19 @@ void USAction::StartAction(AActor* Instigator)
 	USActionComponent* Comp = GetOwningComponent();
 	Comp->ActiveGameplayTags.AppendTags(GrantedTags);
 	
+	bIsRunning = true;
+	
 	OnStartAction(Instigator);
 }
 
 void USAction::StopAction(AActor* Instigator)
 {
+	ensureAlways(bIsRunning);
+	
 	USActionComponent* Comp = GetOwningComponent();
 	Comp->ActiveGameplayTags.RemoveTags(GrantedTags);
+
+	bIsRunning = false;
 	
 	OnStopAction(Instigator);
 }

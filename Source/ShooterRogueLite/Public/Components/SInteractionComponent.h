@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "SInteractionComponent.generated.h"
 
-class ASPlayerCharacter;
+class ASCharacter;
 class USInteractionWidgetComponent;
 
 /*
@@ -32,7 +32,7 @@ protected:
 
 	/* Character that owns this interaction component. */
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Interaction)
-	ASPlayerCharacter* CharacterOwner;
+	ASCharacter* CharacterOwner;
 
 	/* Time when this component last checked for an interactable widget component. */
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Interaction)

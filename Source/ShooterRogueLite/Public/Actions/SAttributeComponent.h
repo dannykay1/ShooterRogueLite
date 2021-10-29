@@ -34,6 +34,8 @@ struct SHOOTERROGUELITE_API FAttribute
 	}
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAttributeChanged, FGameplayTag, Tag, FAttribute, Attribute);
+
 /**
 * 
 */
@@ -59,4 +61,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Attributes)
 	bool ModifyAttribute(FGameplayTag Tag, float Delta, FAttribute& Attribute);
+
+	UPROPERTY(BlueprintAssignable, Category = Attribute)
+	FOnAttributeChanged OnAttributeChanged;
 };

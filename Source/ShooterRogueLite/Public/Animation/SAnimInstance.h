@@ -7,7 +7,7 @@
 #include "SAnimInstance.generated.h"
 
 /**
- * 
+ * Basic anim instance for any character.
  */
 UCLASS()
 class SHOOTERROGUELITE_API USAnimInstance : public UAnimInstance

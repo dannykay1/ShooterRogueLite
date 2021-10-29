@@ -21,11 +21,10 @@ void USActionComponent::BeginPlay()
 void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-}
 
-bool USActionComponent::HasActiveTag(FGameplayTagContainer Tags) const
-{
-	return ActiveGameplayTags.HasAny(Tags);
+	FString Msg = GetNameSafe(GetOwner()) + ": " + ActiveGameplayTags.ToStringSimple();
+
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, Msg);
 }
 
 void USActionComponent::AddAction(TSubclassOf<USAction> ActionClass)
@@ -35,12 +34,22 @@ void USActionComponent::AddAction(TSubclassOf<USAction> ActionClass)
 		return;
 	}
 
-	USAction* NewAction = NewObject<USAction>(this, ActionClass);
+	USAction* NewAction = NewObject<USAction>(GetOwner(), ActionClass);
 	if (ensure(NewAction))
 	{
 		NewAction->Initialize(this);
 		Actions.Add(NewAction);
 	}
+}
+
+void USActionComponent::RemoveAction(USAction* ActionToRemove)
+{
+	if (!ensure(ActionToRemove))
+	{
+		return;
+	}
+
+	Actions.Remove(ActionToRemove);
 }
 
 bool USActionComponent::StartAction(AActor* Instigator, FGameplayTag ActionTag)
@@ -49,6 +58,15 @@ bool USActionComponent::StartAction(AActor* Instigator, FGameplayTag ActionTag)
 	{
 		if (Action && Action->AbilityTag.MatchesTagExact(ActionTag))
 		{
+			CancelAbilitiesWithTags(Instigator, Action->CancelAbilitiesWithTag);
+			
+			if (!Action->CanActivateAction(Instigator))
+			{
+				FString FailedMsg = FString::Printf(TEXT("Failed to run: %s"), *ActionTag.ToString());
+				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FailedMsg);
+				continue;
+			}
+
 			Action->StartAction(Instigator);
 			return true;
 		}
@@ -63,10 +81,30 @@ bool USActionComponent::StopAction(AActor* Instigator, FGameplayTag ActionTag)
 	{
 		if (Action && Action->AbilityTag.MatchesTagExact(ActionTag))
 		{
-			Action->StopAction(Instigator);
-			return true;
+			if (Action->GetIsRunning())
+			{
+				Action->StopAction(Instigator);
+				return true;
+			}
 		}
 	}
 
 	return false;
+}
+
+void USActionComponent::CancelAbilitiesWithTags(AActor* Instigator, FGameplayTagContainer Tags)
+{
+	for (USAction* Action : Actions)
+	{
+		if (Action && ActiveGameplayTags.HasAny(Tags))
+		{
+			if (Action->GetIsRunning())
+			{
+				FString FailedMsg = FString::Printf(TEXT("Cancelled: %s"), *Action->AbilityTag.ToString());
+				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FailedMsg);
+				
+				Action->StopAction(Instigator);
+			}
+		}
+	}
 }
