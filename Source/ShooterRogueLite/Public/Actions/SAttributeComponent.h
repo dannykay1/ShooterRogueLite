@@ -15,7 +15,10 @@ struct SHOOTERROGUELITE_API FAttribute
 	FAttribute()
 	{
 		CurrentValue = BaseValue = 0.f;
-	}	
+	}
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayTag Tag;
 
 	UPROPERTY(BlueprintReadOnly)
 	float CurrentValue;
@@ -23,9 +26,9 @@ struct SHOOTERROGUELITE_API FAttribute
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float BaseValue;
 
-	void Initialize()
+	void Initialize(float Value)
 	{
-		CurrentValue = BaseValue;
+		CurrentValue = BaseValue = Value;
 	}
 
 	void ModifyValue(float Delta)
@@ -34,10 +37,10 @@ struct SHOOTERROGUELITE_API FAttribute
 	}
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAttributeChanged, FGameplayTag, Tag, FAttribute, Attribute);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAttributeChanged, FAttribute, Attribute, float, Delta);
 
 /**
-* 
+* Handles any attributes, defined by FGameplayTag.
 */
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class SHOOTERROGUELITE_API USAttributeComponent : public UActorComponent
@@ -52,15 +55,26 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void HandlePointDamage(AActor* DamagedActor, float Damage, class AController* InstigatedBy, FVector HitLocation, class UPrimitiveComponent* FHitComponent, FName BoneName,
+	                       FVector ShotFromDirection, const class UDamageType* DamageType, AActor* DamageCauser);
+
+	UFUNCTION()
+	void HandleRadialDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, FVector Origin, FHitResult HitInfo, class AController* InstigatedBy,
+	                        AActor* DamageCauser);
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	TMap<FGameplayTag, FAttribute> Attributes;
+	FAttribute HealthAttribute;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
+	FAttribute ArmorAttribute;
 
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = Attributes)
-	bool ModifyAttribute(FGameplayTag Tag, float Delta, FAttribute& Attribute);
+	void ModifyAttribute(FAttribute& Attribute, float Delta);
 
 	UPROPERTY(BlueprintAssignable, Category = Attribute)
 	FOnAttributeChanged OnAttributeChanged;

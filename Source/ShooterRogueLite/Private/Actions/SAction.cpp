@@ -9,6 +9,7 @@
 USAction::USAction()
 {
 	bIsRunning = false;
+	bAutoStart = false;
 }
 
 void USAction::Initialize(USActionComponent* NewActionComp)

@@ -15,6 +15,11 @@ USActionComponent::USActionComponent()
 void USActionComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	for (const TSubclassOf<USAction> ActionClass : DefaultActions)
+	{
+		AddAction(GetOwner(), ActionClass);
+	}
 }
 
 // Called every frame
@@ -27,7 +32,7 @@ void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, Msg);
 }
 
-void USActionComponent::AddAction(TSubclassOf<USAction> ActionClass)
+void USActionComponent::AddAction(AActor* Instigator, TSubclassOf<USAction> ActionClass)
 {
 	if (!ensure(ActionClass))
 	{
@@ -39,17 +44,20 @@ void USActionComponent::AddAction(TSubclassOf<USAction> ActionClass)
 	{
 		NewAction->Initialize(this);
 		Actions.Add(NewAction);
+
+		if (NewAction->bAutoStart && ensure(NewAction->CanActivateAction(Instigator)))
+		{
+			NewAction->StartAction(Instigator);
+		}
 	}
 }
 
 void USActionComponent::RemoveAction(USAction* ActionToRemove)
 {
-	if (!ensure(ActionToRemove))
+	if (ensure(ActionToRemove && !ActionToRemove->GetIsRunning()))
 	{
-		return;
+		Actions.Remove(ActionToRemove);
 	}
-
-	Actions.Remove(ActionToRemove);
 }
 
 bool USActionComponent::StartAction(AActor* Instigator, FGameplayTag ActionTag)
@@ -59,7 +67,7 @@ bool USActionComponent::StartAction(AActor* Instigator, FGameplayTag ActionTag)
 		if (Action && Action->AbilityTag.MatchesTagExact(ActionTag))
 		{
 			CancelAbilitiesWithTags(Instigator, Action->CancelAbilitiesWithTag);
-			
+
 			if (!Action->CanActivateAction(Instigator))
 			{
 				FString FailedMsg = FString::Printf(TEXT("Failed to run: %s"), *ActionTag.ToString());
@@ -102,7 +110,7 @@ void USActionComponent::CancelAbilitiesWithTags(AActor* Instigator, FGameplayTag
 			{
 				FString FailedMsg = FString::Printf(TEXT("Cancelled: %s"), *Action->AbilityTag.ToString());
 				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FailedMsg);
-				
+
 				Action->StopAction(Instigator);
 			}
 		}

@@ -25,6 +25,9 @@ public:
 	/* Initializes the ability with the USActionComponent being passed in. */
 	void Initialize(USActionComponent* NewActionComp);
 
+	UFUNCTION(BlueprintCallable, Category = Action)
+	FORCEINLINE USActionComponent* GetOwningComponent() const { return ActionComp; }
+
 	/* Action tags to start/stop. */
 	UPROPERTY(EditDefaultsOnly, Category = Tags)
 	FGameplayTag AbilityTag;
@@ -44,11 +47,11 @@ public:
 	/* Gets the world from the Actor Owner. */
 	virtual UWorld* GetWorld() const override;
 
+	UPROPERTY(EditDefaultsOnly, Category = Action)
+	bool bAutoStart;
+
 	UFUNCTION(BlueprintPure, Category = Action)
-	FORCEINLINE bool GetIsRunning() const
-	{
-		return bIsRunning;
-	}
+	FORCEINLINE bool GetIsRunning() const { return bIsRunning; }
 
 	/* Determines if Action can be started. Also calls CheckCost. */
 	bool CanActivateAction(AActor* Instigator);
@@ -58,27 +61,25 @@ public:
 	bool CanStart(AActor* Instigator);
 
 	/* Starts the action and calls OnStartAction for blueprint implementation. */
-	void StartAction(AActor* Instigator);
+	UFUNCTION(BlueprintCallable, Category = Action)
+	virtual void StartAction(AActor* Instigator);
 
 	/* Blueprint event that extends StartAction behavior. */
 	UFUNCTION(BlueprintImplementableEvent, Category = Action)
 	void OnStartAction(AActor* Instigator);
 
 	/* Stops the action and calls OnStartAction for blueprint implementation. */
-	void StopAction(AActor* Instigator);
+	UFUNCTION(BlueprintCallable, Category = Action)
+	virtual void StopAction(AActor* Instigator);
 
 	/* Blueprint event that extends StopAction behavior. */
 	UFUNCTION(BlueprintImplementableEvent, Category = Action)
 	void OnStopAction(AActor* Instigator);
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Action)
 	USActionComponent* ActionComp;
 
-	UFUNCTION(BlueprintCallable, Category = Action)
-	FORCEINLINE USActionComponent* GetOwningComponent() const
-	{
-		return ActionComp;
-	}
-
+	/* Flag to ensure Action is not starting/stopping at wrong times. */
 	bool bIsRunning;
 };

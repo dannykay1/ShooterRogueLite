@@ -26,8 +26,13 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	/* TArray of all Actions currently running. */
 	UPROPERTY()
 	TArray<USAction*> Actions;
+
+	/* Actions the component will start with. */
+	UPROPERTY(EditDefaultsOnly, Category = Action)
+	TArray<TSubclassOf<USAction>> DefaultActions;
 
 public:
 	// Called every frame
@@ -38,7 +43,7 @@ public:
 	FGameplayTagContainer ActiveGameplayTags;
 
 	UFUNCTION(BlueprintCallable, Category = Action)
-	void AddAction(TSubclassOf<USAction> ActionClass);
+	void AddAction(AActor* Instigator, TSubclassOf<USAction> ActionClass);
 
 	UFUNCTION(BlueprintCallable, Category = Action)
 	void RemoveAction(USAction* ActionToRemove);

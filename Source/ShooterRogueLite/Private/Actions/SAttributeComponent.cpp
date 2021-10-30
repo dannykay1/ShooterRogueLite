@@ -2,21 +2,29 @@
 
 
 #include "Actions/SAttributeComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values for this component's properties
 USAttributeComponent::USAttributeComponent()
 {
+	HealthAttribute = FAttribute();
+	HealthAttribute.Tag = FGameplayTag::RequestGameplayTag("Attribute.Health");
+	HealthAttribute.Initialize(100.f);
+
+	ArmorAttribute = FAttribute();
+	ArmorAttribute.Initialize(100.f);
 }
 
 // Called when the game starts
 void USAttributeComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	for (TPair<FGameplayTag, FAttribute>& Pair : Attributes)
+
+	if (AActor* MyOwner = GetOwner())
 	{
-		Pair.Value.Initialize();
+		MyOwner->OnTakePointDamage.AddDynamic(this, &USAttributeComponent::HandlePointDamage);
+		MyOwner->OnTakeRadialDamage.AddDynamic(this, &USAttributeComponent::HandleRadialDamage);
 	}
 }
 
@@ -26,18 +34,20 @@ void USAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-bool USAttributeComponent::ModifyAttribute(FGameplayTag Tag, float Delta, FAttribute& Attribute)
+void USAttributeComponent::HandlePointDamage(AActor* DamagedActor, float Damage, AController* InstigatedBy, FVector HitLocation, UPrimitiveComponent* FHitComponent, FName BoneName,
+                                             FVector ShotFromDirection, const UDamageType* DamageType, AActor* DamageCauser)
 {
-	for (TPair<FGameplayTag, FAttribute>& Pair : Attributes)
-	{
-		if (Pair.Key.MatchesTagExact(Tag))
-		{
-			Pair.Value.ModifyValue(Delta);
-			Attribute = Pair.Value;
-			OnAttributeChanged.Broadcast(Tag, Pair.Value);
-			return true;
-		}
-	}
+	ModifyAttribute(HealthAttribute, -Damage);
+}
 
-	return false;
+void USAttributeComponent::HandleRadialDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, FVector Origin, FHitResult HitInfo, AController* InstigatedBy,
+	AActor* DamageCauser)
+{
+	ModifyAttribute(HealthAttribute, -Damage);
+}
+
+void USAttributeComponent::ModifyAttribute(FAttribute& Attribute, float Delta)
+{
+	Attribute.ModifyValue(Delta);
+	OnAttributeChanged.Broadcast(Attribute, Delta);
 }
