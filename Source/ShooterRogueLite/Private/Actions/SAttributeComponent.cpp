@@ -8,12 +8,8 @@
 // Sets default values for this component's properties
 USAttributeComponent::USAttributeComponent()
 {
-	HealthAttribute = FAttribute();
-	HealthAttribute.Tag = FGameplayTag::RequestGameplayTag("Attribute.Health");
-	HealthAttribute.Initialize(100.f);
-
-	ArmorAttribute = FAttribute();
-	ArmorAttribute.Initialize(100.f);
+	HealthAttribute = FAttribute(FGameplayTag::RequestGameplayTag("Attribute.Health"), 100.f);
+	ArmorAttribute = FAttribute(FGameplayTag::RequestGameplayTag("Attribute.Armor"), 100.f);
 }
 
 // Called when the game starts
@@ -41,7 +37,7 @@ void USAttributeComponent::HandlePointDamage(AActor* DamagedActor, float Damage,
 }
 
 void USAttributeComponent::HandleRadialDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, FVector Origin, FHitResult HitInfo, AController* InstigatedBy,
-	AActor* DamageCauser)
+                                              AActor* DamageCauser)
 {
 	ModifyAttribute(HealthAttribute, -Damage);
 }

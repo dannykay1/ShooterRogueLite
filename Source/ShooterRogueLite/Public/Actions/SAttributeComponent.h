@@ -17,6 +17,12 @@ struct SHOOTERROGUELITE_API FAttribute
 		CurrentValue = BaseValue = 0.f;
 	}
 
+	FAttribute(FGameplayTag DefaultTag, float DefaultValue)
+	{
+		Tag = DefaultTag;
+		CurrentValue = BaseValue = DefaultValue;
+	}
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayTag Tag;
 
@@ -25,11 +31,6 @@ struct SHOOTERROGUELITE_API FAttribute
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float BaseValue;
-
-	void Initialize(float Value)
-	{
-		CurrentValue = BaseValue = Value;
-	}
 
 	void ModifyValue(float Delta)
 	{
@@ -63,6 +64,8 @@ protected:
 	void HandleRadialDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, FVector Origin, FHitResult HitInfo, class AController* InstigatedBy,
 	                        AActor* DamageCauser);
 
+	TMap<FGameplayTag, FAttribute> Attributes;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
 	FAttribute HealthAttribute;
 
@@ -72,6 +75,12 @@ protected:
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UFUNCTION(BlueprintPure, Category = Attributes)
+	FORCEINLINE FAttribute GetHealthAttribute() const { return HealthAttribute; }
+	
+	UFUNCTION(BlueprintPure, Category = Attributes)
+	FORCEINLINE FAttribute GetArmorAttribute() const { return ArmorAttribute; }
 
 	UFUNCTION(BlueprintCallable, Category = Attributes)
 	void ModifyAttribute(FAttribute& Attribute, float Delta);
