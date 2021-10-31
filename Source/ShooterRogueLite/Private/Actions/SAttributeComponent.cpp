@@ -33,16 +33,29 @@ void USAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 void USAttributeComponent::HandlePointDamage(AActor* DamagedActor, float Damage, AController* InstigatedBy, FVector HitLocation, UPrimitiveComponent* FHitComponent, FName BoneName,
                                              FVector ShotFromDirection, const UDamageType* DamageType, AActor* DamageCauser)
 {
-	ModifyAttribute(HealthAttribute, -Damage);
+	ModifyAttribute(FGameplayTag::RequestGameplayTag("Attribute.Health"), -Damage);
+	UE_LOG(LogTemp, Warning, TEXT("Damage %f"), Damage);
 }
 
 void USAttributeComponent::HandleRadialDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, FVector Origin, FHitResult HitInfo, AController* InstigatedBy,
                                               AActor* DamageCauser)
 {
-	ModifyAttribute(HealthAttribute, -Damage);
+	ModifyAttribute(FGameplayTag::RequestGameplayTag("Attribute.Health"), -Damage);
 }
 
-void USAttributeComponent::ModifyAttribute(FAttribute& Attribute, float Delta)
+void USAttributeComponent::ModifyAttribute(FGameplayTag Tag, float Delta)
+{
+	if (HealthAttribute.MatchesTagExact(Tag))
+	{
+		OnModifyAttribute(HealthAttribute, Delta);
+	}
+	else if (ArmorAttribute.MatchesTagExact(Tag))
+	{
+		OnModifyAttribute(ArmorAttribute, Delta);
+	}
+}
+
+void USAttributeComponent::OnModifyAttribute(FAttribute& Attribute, float Delta) const
 {
 	Attribute.ModifyValue(Delta);
 	OnAttributeChanged.Broadcast(Attribute, Delta);

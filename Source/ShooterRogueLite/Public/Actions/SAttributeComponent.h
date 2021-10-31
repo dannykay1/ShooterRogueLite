@@ -32,6 +32,11 @@ struct SHOOTERROGUELITE_API FAttribute
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float BaseValue;
 
+	bool MatchesTagExact(FGameplayTag TagToCompare) const
+	{
+		return Tag.MatchesTagExact(TagToCompare);
+	}	
+
 	void ModifyValue(float Delta)
 	{
 		CurrentValue = FMath::Clamp(CurrentValue + Delta, 0.f, BaseValue);
@@ -64,8 +69,6 @@ protected:
 	void HandleRadialDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, FVector Origin, FHitResult HitInfo, class AController* InstigatedBy,
 	                        AActor* DamageCauser);
 
-	TMap<FGameplayTag, FAttribute> Attributes;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
 	FAttribute HealthAttribute;
 
@@ -83,7 +86,10 @@ public:
 	FORCEINLINE FAttribute GetArmorAttribute() const { return ArmorAttribute; }
 
 	UFUNCTION(BlueprintCallable, Category = Attributes)
-	void ModifyAttribute(FAttribute& Attribute, float Delta);
+	void ModifyAttribute(FGameplayTag Tag, float Delta);
+
+	/* Convenience function to edit the attribute by passing it by reference. */
+	void OnModifyAttribute(FAttribute& Attribute, float Delta) const;
 
 	UPROPERTY(BlueprintAssignable, Category = Attribute)
 	FOnAttributeChanged OnAttributeChanged;

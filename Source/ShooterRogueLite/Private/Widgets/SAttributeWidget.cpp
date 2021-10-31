@@ -7,6 +7,12 @@
 
 void USAttributeWidget::InitializeWidget(USAttributeComponent* AttributeComp, FGameplayTag Tag)
 {
+	if (!ensure(AttributeComp))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Attribute Comp is NULL for tag %s"), *Tag.ToString());
+		return;
+	}
+	
 	AttributeComponent = AttributeComp;
 	AttributeTag = Tag;
 
@@ -15,8 +21,10 @@ void USAttributeWidget::InitializeWidget(USAttributeComponent* AttributeComp, FG
 
 void USAttributeWidget::AttributeChanged(FAttribute Attribute, float Delta)
 {
-	if (Attribute.Tag.MatchesTagExact(AttributeTag))
+	if (Attribute.MatchesTagExact(AttributeTag))
 	{
 		OnAttributeChanged(Attribute, Delta);
 	}
+	
+	UE_LOG(LogTemp, Warning, TEXT("Widget tryin ta update stuff"));
 }
