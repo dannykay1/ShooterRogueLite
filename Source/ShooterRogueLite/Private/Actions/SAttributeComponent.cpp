@@ -17,6 +17,11 @@ void USAttributeComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	for (auto& Attribute : DefaultAttributes)
+	{
+		Attributes.Add(Attribute.Key, FAttribute(Attribute.Key, Attribute.Value.BaseValue));
+	}
+
 	if (AActor* MyOwner = GetOwner())
 	{
 		MyOwner->OnTakePointDamage.AddDynamic(this, &USAttributeComponent::HandlePointDamage);
@@ -33,30 +38,48 @@ void USAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 void USAttributeComponent::HandlePointDamage(AActor* DamagedActor, float Damage, AController* InstigatedBy, FVector HitLocation, UPrimitiveComponent* FHitComponent, FName BoneName,
                                              FVector ShotFromDirection, const UDamageType* DamageType, AActor* DamageCauser)
 {
-	ModifyAttribute(FGameplayTag::RequestGameplayTag("Attribute.Health"), -Damage);
-	UE_LOG(LogTemp, Warning, TEXT("Damage %f"), Damage);
+	ModifyAttribute(FGameplayTag::RequestGameplayTag("Attribute.Health"), HitLocation, -Damage);
+
+	// HealthAttribute.ModifyValue(-Damage);
+	// OnAttributeChanged.Broadcast(HealthAttribute, Damage, HitLocation);
+
+	//ModifyAttribute()
 }
 
 void USAttributeComponent::HandleRadialDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, FVector Origin, FHitResult HitInfo, AController* InstigatedBy,
                                               AActor* DamageCauser)
 {
-	ModifyAttribute(FGameplayTag::RequestGameplayTag("Attribute.Health"), -Damage);
+	// HealthAttribute.ModifyValue(-Damage);
+	// OnAttributeChanged.Broadcast(HealthAttribute, Damage, HitInfo.ImpactPoint);
+	
+	ModifyAttribute(FGameplayTag::RequestGameplayTag("Attribute.Health"), HitInfo.ImpactPoint, -Damage);
 }
 
-void USAttributeComponent::ModifyAttribute(FGameplayTag Tag, float Delta)
+void USAttributeComponent::ModifyAttribute(FGameplayTag Tag, FVector HitLocation, float Delta)
 {
-	if (HealthAttribute.MatchesTagExact(Tag))
+	// if (HealthAttribute.MatchesTagExact(Tag))
+	// {
+	// 	OnModifyAttribute(HealthAttribute, Delta);
+	// }
+	// else if (ArmorAttribute.MatchesTagExact(Tag))
+	// {
+	// 	OnModifyAttribute(ArmorAttribute, Delta);
+	// }
+
+	for (auto& Attribute : Attributes)
 	{
-		OnModifyAttribute(HealthAttribute, Delta);
-	}
-	else if (ArmorAttribute.MatchesTagExact(Tag))
-	{
-		OnModifyAttribute(ArmorAttribute, Delta);
+		if (Attribute.Key.MatchesTagExact(Tag))
+		{
+			Attribute.Value.ModifyValue(Delta);
+
+			const float AbsDelta = FMath::Abs(Delta);
+			OnAttributeChanged.Broadcast(Attribute.Value, HitLocation, AbsDelta);
+		}
 	}
 }
 
 void USAttributeComponent::OnModifyAttribute(FAttribute& Attribute, float Delta) const
 {
-	Attribute.ModifyValue(Delta);
-	OnAttributeChanged.Broadcast(Attribute, Delta);
+	// Attribute.ModifyValue(Delta);
+	// OnAttributeChanged.Broadcast(Attribute, Delta);
 }

@@ -31,8 +31,8 @@ public:
 
 protected:
 	UFUNCTION()
-	void AttributeChanged(FAttribute Attribute, float Delta);
+	void AttributeChanged(FAttribute Attribute, FVector HitLocation, float Delta);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Attribute)
-	void OnAttributeChanged(FAttribute Attribute, float Delta);
+	void OnAttributeChanged(FAttribute Attribute, float Delta, FVector HitLocation);
 };

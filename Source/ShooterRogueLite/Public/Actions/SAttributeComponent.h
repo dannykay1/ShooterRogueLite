@@ -43,7 +43,7 @@ struct SHOOTERROGUELITE_API FAttribute
 	}
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAttributeChanged, FAttribute, Attribute, float, Delta);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnAttributeChanged, FAttribute, Attribute, FVector, HitLocation, float, Damage);
 
 /**
 * Handles any attributes, defined by FGameplayTag.
@@ -69,6 +69,11 @@ protected:
 	void HandleRadialDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, FVector Origin, FHitResult HitInfo, class AController* InstigatedBy,
 	                        AActor* DamageCauser);
 
+	TMap<FGameplayTag, FAttribute> Attributes;
+
+	UPROPERTY(EditDefaultsOnly, Category = Attributes)
+	TMap<FGameplayTag, FAttribute> DefaultAttributes;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
 	FAttribute HealthAttribute;
 
@@ -86,7 +91,7 @@ public:
 	FORCEINLINE FAttribute GetArmorAttribute() const { return ArmorAttribute; }
 
 	UFUNCTION(BlueprintCallable, Category = Attributes)
-	void ModifyAttribute(FGameplayTag Tag, float Delta);
+	void ModifyAttribute(FGameplayTag Tag, FVector HitLocation, float Delta);
 
 	/* Convenience function to edit the attribute by passing it by reference. */
 	void OnModifyAttribute(FAttribute& Attribute, float Delta) const;
