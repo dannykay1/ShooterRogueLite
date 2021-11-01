@@ -3,7 +3,7 @@
 
 #include "Player/SCharacter.h"
 #include "Actions/SActionComponent.h"
-#include "Actions/SAttributeComponent.h"
+#include "Attributes/SAttributeComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SInteractionComponent.h"
 #include "Components/SkeletalMeshComponent.h"

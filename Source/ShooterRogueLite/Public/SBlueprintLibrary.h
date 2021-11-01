@@ -8,6 +8,7 @@
 #include "SBlueprintLibrary.generated.h"
 
 class USActionComponent;
+class USAttributeComponent;
 
 /**
  * Game-specific blueprint library.
@@ -18,9 +19,14 @@ class SHOOTERROGUELITE_API USBlueprintLibrary : public UObject
 {
 	GENERATED_BODY()
 
-	UFUNCTION(BlueprintPure, Category = Game)
-	USActionComponent* GetActionComponent(AActor* Actor) const;
+public:
 
 	UFUNCTION(BlueprintPure, Category = Game)
-	bool ActorHasTag(AActor* Actor, FGameplayTag Tag) const;
+	static USActionComponent* GetActionComponent(AActor* Actor);
+
+	UFUNCTION(BlueprintPure, Category = Game)
+	static bool ActorHasTag(AActor* Actor, FGameplayTag Tag);
+
+	UFUNCTION(BlueprintPure, Category = Game)
+	static USAttributeComponent* GetAttributeComponent(AActor* Actor);
 };

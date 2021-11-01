@@ -2,7 +2,7 @@
 
 
 #include "Widgets/SAttributeWidget.h"
-#include "Actions/SAttributeComponent.h"
+#include "Attributes/SAttributeComponent.h"
 
 
 void USAttributeWidget::InitializeWidget(USAttributeComponent* AttributeComp, FGameplayTag Tag)

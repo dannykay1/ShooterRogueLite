@@ -1,7 +1,7 @@
 ﻿// Copyright Danny Kay 2021
 
 
-#include "Components/SInteractionWidgetComponent.h"
+#include "Widgets/SInteractionWidgetComponent.h"
 #include "Components/SInteractionComponent.h"
 #include "Player/SCharacter.h"
 #include "Widgets/SInteractionWidget.h"
@@ -88,7 +88,10 @@ void USInteractionWidgetComponent::BeginFocus(ASCharacter* Character)
 
 	SetHiddenInGame(false);
 
-	for (auto& VisualComp : GetOwner()->GetComponentsByClass(UPrimitiveComponent::StaticClass()))
+	TArray<UPrimitiveComponent*> PrimitiveComponents;
+	GetOwner()->GetComponents(PrimitiveComponents);
+
+	for (auto& VisualComp : PrimitiveComponents)
 	{
 		if (UPrimitiveComponent* Prim = Cast<UPrimitiveComponent>(VisualComp))
 		{
@@ -108,7 +111,10 @@ void USInteractionWidgetComponent::EndFocus(ASCharacter* Character)
 
 	SetHiddenInGame(true);
 
-	for (auto& VisualComp : GetOwner()->GetComponentsByClass(UPrimitiveComponent::StaticClass()))
+	TArray<UPrimitiveComponent*> PrimitiveComponents;
+	GetOwner()->GetComponents(PrimitiveComponents);
+
+	for (auto& VisualComp : PrimitiveComponents)
 	{
 		if (UPrimitiveComponent* Prim = Cast<UPrimitiveComponent>(VisualComp))
 		{

@@ -43,7 +43,7 @@ struct SHOOTERROGUELITE_API FAttribute
 	}
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnAttributeChanged, FAttribute, Attribute, FVector, HitLocation, float, Damage);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnAttributeChanged, FAttribute, Attribute, FVector, HitLocation, float, Delta);
 
 /**
 * Handles any attributes, defined by FGameplayTag.
@@ -75,26 +75,50 @@ protected:
 	TMap<FGameplayTag, FAttribute> DefaultAttributes;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	FAttribute HealthAttribute;
+	FAttribute Health;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	FAttribute ArmorAttribute;
+	FAttribute Armor;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
+	FAttribute Speed;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
+	FAttribute Credits;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
+	FAttribute Experience;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
+	FAttribute AmmoAssaultRifle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
+	FAttribute AmmoShotgun;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
+	FAttribute AmmoPistol;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
+	FAttribute AmmoGrenadeLauncher;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
+	FAttribute AmmoRockerLauncher;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
+	FAttribute AmmoSniperRifle;
 
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintPure, Category = Attributes)
-	FORCEINLINE FAttribute GetHealthAttribute() const { return HealthAttribute; }
+	FORCEINLINE FAttribute GetHealthAttribute() const { return Health; }
 	
 	UFUNCTION(BlueprintPure, Category = Attributes)
-	FORCEINLINE FAttribute GetArmorAttribute() const { return ArmorAttribute; }
+	FORCEINLINE FAttribute GetArmorAttribute() const { return Armor; }
 
 	UFUNCTION(BlueprintCallable, Category = Attributes)
 	void ModifyAttribute(FGameplayTag Tag, FVector HitLocation, float Delta);
-
-	/* Convenience function to edit the attribute by passing it by reference. */
-	void OnModifyAttribute(FAttribute& Attribute, float Delta) const;
 
 	UPROPERTY(BlueprintAssignable, Category = Attribute)
 	FOnAttributeChanged OnAttributeChanged;

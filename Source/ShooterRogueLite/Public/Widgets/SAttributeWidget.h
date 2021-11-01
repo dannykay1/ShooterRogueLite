@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
-#include "Actions/SAttributeComponent.h"
+#include "Attributes/SAttributeComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "SAttributeWidget.generated.h"
 

@@ -2,7 +2,7 @@
 
 
 #include "Weapons/SWeapon.h"
-#include "Components/SInteractionWidgetComponent.h"
+#include "Widgets/SInteractionWidgetComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 
 

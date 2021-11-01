@@ -2,7 +2,7 @@
 
 
 #include "Components/SInteractionComponent.h"
-#include "Components/SInteractionWidgetComponent.h"
+#include "Widgets/SInteractionWidgetComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Player/SCharacter.h"
 

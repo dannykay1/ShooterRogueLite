@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/SInteractionWidgetComponent.h"
 #include "SInteractionWidget.generated.h"
 
+class USInteractionWidgetComponent;
+
 /**
- * Base widget for any interactables.
+ * Base widget for any actor that is interactable.
  */
 UCLASS()
 class SHOOTERROGUELITE_API USInteractionWidget : public UUserWidget

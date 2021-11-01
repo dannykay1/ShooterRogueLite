@@ -2,6 +2,7 @@
 
 
 #include "Widgets/SInteractionWidget.h"
+#include "Widgets/SInteractionWidgetComponent.h"
 
 
 void USInteractionWidget::UpdateInteractionWidget(USInteractionWidgetComponent* InteractionComponent)
