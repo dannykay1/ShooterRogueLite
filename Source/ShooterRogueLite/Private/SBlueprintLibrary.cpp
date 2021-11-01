@@ -18,8 +18,7 @@ USActionComponent* USBlueprintLibrary::GetActionComponent(AActor* Actor)
 
 bool USBlueprintLibrary::ActorHasTag(AActor* Actor, FGameplayTag Tag)
 {
-	USActionComponent* ActionComp = GetActionComponent(Actor);
-	if (ActionComp)
+	if (USActionComponent* ActionComp = GetActionComponent(Actor))
 	{
 		return ActionComp->ActiveGameplayTags.HasTagExact(Tag);
 	}
@@ -35,4 +34,28 @@ USAttributeComponent* USBlueprintLibrary::GetAttributeComponent(AActor* Actor)
 	}
 
 	return nullptr;
+}
+
+bool USBlueprintLibrary::ApplyDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, AController* EventInstigator, AActor* DamageCauser,
+                                     TSubclassOf<UDamageType> DamageType)
+{
+	if (USAttributeComponent* AttributeComp = GetAttributeComponent(DamagedActor))
+	{
+		AttributeComp->ModifyAttribute(Tag, DamagedActor->GetActorLocation(), -BaseDamage);
+		return true;
+	}
+
+	return false;
+}
+
+bool USBlueprintLibrary::ApplyPointDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, FVector HitLocation, AController* EventInstigator, AActor* DamageCauser,
+                                          TSubclassOf<UDamageType> DamageType)
+{
+	if (USAttributeComponent* AttributeComp = GetAttributeComponent(DamagedActor))
+	{
+		AttributeComp->ModifyAttribute(Tag, HitLocation, -BaseDamage);
+		return true;
+	}
+
+	return false;
 }

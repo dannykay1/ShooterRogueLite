@@ -7,6 +7,8 @@
 #include "Components/ActorComponent.h"
 #include "SAttributeComponent.generated.h"
 
+class USStartingAttributesData;
+
 USTRUCT(BlueprintType)
 struct SHOOTERROGUELITE_API FAttribute
 {
@@ -23,19 +25,19 @@ struct SHOOTERROGUELITE_API FAttribute
 		CurrentValue = BaseValue = DefaultValue;
 	}
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly)
 	FGameplayTag Tag;
 
 	UPROPERTY(BlueprintReadOnly)
 	float CurrentValue;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float BaseValue;
 
 	bool MatchesTagExact(FGameplayTag TagToCompare) const
 	{
 		return Tag.MatchesTagExact(TagToCompare);
-	}	
+	}
 
 	void ModifyValue(float Delta)
 	{
@@ -61,63 +63,17 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-	void HandlePointDamage(AActor* DamagedActor, float Damage, class AController* InstigatedBy, FVector HitLocation, class UPrimitiveComponent* FHitComponent, FName BoneName,
-	                       FVector ShotFromDirection, const class UDamageType* DamageType, AActor* DamageCauser);
-
-	UFUNCTION()
-	void HandleRadialDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, FVector Origin, FHitResult HitInfo, class AController* InstigatedBy,
-	                        AActor* DamageCauser);
+	/* Sets Attributes from this asset. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
+	USStartingAttributesData* DefaultAttribute;
 
 	TMap<FGameplayTag, FAttribute> Attributes;
-
-	UPROPERTY(EditDefaultsOnly, Category = Attributes)
-	TMap<FGameplayTag, FAttribute> DefaultAttributes;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	FAttribute Health;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	FAttribute Armor;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	FAttribute Speed;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	FAttribute Credits;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	FAttribute Experience;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	FAttribute AmmoAssaultRifle;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	FAttribute AmmoShotgun;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	FAttribute AmmoPistol;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	FAttribute AmmoGrenadeLauncher;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	FAttribute AmmoRockerLauncher;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	FAttribute AmmoSniperRifle;
 
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION(BlueprintPure, Category = Attributes)
-	FORCEINLINE FAttribute GetHealthAttribute() const { return Health; }
-	
-	UFUNCTION(BlueprintPure, Category = Attributes)
-	FORCEINLINE FAttribute GetArmorAttribute() const { return Armor; }
-
-	UFUNCTION(BlueprintCallable, Category = Attributes)
+	UFUNCTION(BlueprintCallable, Category = Attribute)
 	void ModifyAttribute(FGameplayTag Tag, FVector HitLocation, float Delta);
 
 	UPROPERTY(BlueprintAssignable, Category = Attribute)

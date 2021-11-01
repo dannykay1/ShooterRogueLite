@@ -9,6 +9,8 @@
 
 class USActionComponent;
 class USAttributeComponent;
+class AController;
+class UDamageType;
 
 /**
  * Game-specific blueprint library.
@@ -29,4 +31,10 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = Game)
 	static USAttributeComponent* GetAttributeComponent(AActor* Actor);
+
+	UFUNCTION(BlueprintCallable, Category = Game)
+	static bool ApplyDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, AController* EventInstigator, AActor* DamageCauser, TSubclassOf<UDamageType> DamageType);
+
+	UFUNCTION(BlueprintCallable, Category = Game)
+	static bool ApplyPointDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, FVector HitLocation, AController* EventInstigator, AActor* DamageCauser, TSubclassOf<UDamageType> DamageType);
 };
