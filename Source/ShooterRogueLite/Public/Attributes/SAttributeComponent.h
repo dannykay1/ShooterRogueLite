@@ -45,7 +45,7 @@ struct SHOOTERROGUELITE_API FAttribute
 	}
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnAttributeChanged, FAttribute, Attribute, FVector, HitLocation, float, Delta);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChanged, FAttribute, Attribute);
 
 /**
 * Handles any attributes, defined by FGameplayTag.
@@ -73,9 +73,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION(BlueprintCallable, Category = Attribute)
-	void ModifyAttribute(FGameplayTag Tag, FVector HitLocation, float Delta);
-
-	UPROPERTY(BlueprintAssignable, Category = Attribute)
+	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChanged OnAttributeChanged;
+
+	UFUNCTION(BlueprintCallable, Category = Attribute)
+	void ModifyAttribute(FGameplayTag Tag, float Delta);
 };

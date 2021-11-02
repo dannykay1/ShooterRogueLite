@@ -41,7 +41,7 @@ bool USBlueprintLibrary::ApplyDamage(AActor* DamagedActor, FGameplayTag Tag, flo
 {
 	if (USAttributeComponent* AttributeComp = GetAttributeComponent(DamagedActor))
 	{
-		AttributeComp->ModifyAttribute(Tag, DamagedActor->GetActorLocation(), -BaseDamage);
+		AttributeComp->ModifyAttribute(Tag, -BaseDamage);
 		return true;
 	}
 
@@ -53,7 +53,7 @@ bool USBlueprintLibrary::ApplyPointDamage(AActor* DamagedActor, FGameplayTag Tag
 {
 	if (USAttributeComponent* AttributeComp = GetAttributeComponent(DamagedActor))
 	{
-		AttributeComp->ModifyAttribute(Tag, HitLocation, -BaseDamage);
+		AttributeComp->ModifyAttribute(Tag, -BaseDamage);
 		return true;
 	}
 

@@ -37,14 +37,14 @@ void USAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void USAttributeComponent::ModifyAttribute(FGameplayTag Tag, FVector HitLocation, float Delta)
+void USAttributeComponent::ModifyAttribute(FGameplayTag Tag, float Delta)
 {
 	for (auto& Attribute : Attributes)
 	{
 		if (Attribute.Key.MatchesTagExact(Tag))
 		{
 			Attribute.Value.ModifyValue(Delta);
-			OnAttributeChanged.Broadcast(Attribute.Value, HitLocation, Delta);
+			OnAttributeChanged.Broadcast(Attribute.Value);
 		}
 	}
 }

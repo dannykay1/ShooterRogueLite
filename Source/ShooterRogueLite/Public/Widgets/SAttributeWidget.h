@@ -28,11 +28,4 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = Attribute, meta = (ExposeOnSpawn = true))
 	FGameplayTag AttributeTag;
-
-protected:
-	UFUNCTION()
-	void AttributeChanged(FAttribute Attribute, FVector HitLocation, float Delta);
-
-	UFUNCTION(BlueprintImplementableEvent, Category = Attribute)
-	void OnAttributeChanged(FAttribute Attribute, float Delta, FVector HitLocation);
 };

@@ -15,14 +15,4 @@ void USAttributeWidget::InitializeWidget(USAttributeComponent* AttributeComp, FG
 	
 	AttributeComponent = AttributeComp;
 	AttributeTag = Tag;
-
-	AttributeComponent->OnAttributeChanged.AddDynamic(this, &USAttributeWidget::AttributeChanged);
-}
-
-void USAttributeWidget::AttributeChanged(FAttribute Attribute, FVector HitLocation, float Delta)
-{
-	if (Attribute.MatchesTagExact(AttributeTag))
-	{
-		OnAttributeChanged(Attribute, Delta, HitLocation);
-	}
 }
