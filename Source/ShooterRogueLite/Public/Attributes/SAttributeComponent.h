@@ -4,48 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "STypes.h"
 #include "Components/ActorComponent.h"
 #include "SAttributeComponent.generated.h"
 
-class USStartingAttributesData;
-
-USTRUCT(BlueprintType)
-struct SHOOTERROGUELITE_API FAttribute
-{
-	GENERATED_BODY()
-
-	FAttribute()
-	{
-		CurrentValue = BaseValue = 0.f;
-	}
-
-	FAttribute(FGameplayTag DefaultTag, float DefaultValue)
-	{
-		Tag = DefaultTag;
-		CurrentValue = BaseValue = DefaultValue;
-	}
-
-	UPROPERTY(BlueprintReadOnly)
-	FGameplayTag Tag;
-
-	UPROPERTY(BlueprintReadOnly)
-	float CurrentValue;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float BaseValue;
-
-	bool MatchesTagExact(FGameplayTag TagToCompare) const
-	{
-		return Tag.MatchesTagExact(TagToCompare);
-	}
-
-	void ModifyValue(float Delta)
-	{
-		CurrentValue = FMath::Clamp(CurrentValue + Delta, 0.f, BaseValue);
-	}
-};
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChanged, FAttribute, Attribute);
+class UDataTable;
 
 /**
 * Handles any attributes, defined by FGameplayTag.
@@ -63,9 +26,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	/* Sets Attributes from this asset. */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attributes)
-	USStartingAttributesData* DefaultAttribute;
+	UPROPERTY(EditDefaultsOnly, Category = Attribute)
+	UDataTable* AttributeTable;
 
 	TMap<FGameplayTag, FAttribute> Attributes;
 

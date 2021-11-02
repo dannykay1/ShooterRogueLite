@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
-#include "Attributes/SAttributeComponent.h"
+#include "STypes.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "SAsyncAction_AttributeChanged.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnAttributeChangedd, FAttribute, Attribute, float, CurrentValue, float, BaseValue);
+class USAttributeComponent;
 
 /**
  * Blueprint node to automatically register a listener for an attribute in AttributeComponent.
@@ -21,7 +21,7 @@ class SHOOTERROGUELITE_API USAsyncAction_AttributeChanged : public UBlueprintAsy
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	FOnAttributeChangedd OnAttributeChanged;
+	FOnAttributeChanged OnAttributeChanged;
 
 	UFUNCTION(BlueprintCallable)
 	static USAsyncAction_AttributeChanged* ListenForAttributeChange(USAttributeComponent* AttributeComponent, FGameplayTag Tag);

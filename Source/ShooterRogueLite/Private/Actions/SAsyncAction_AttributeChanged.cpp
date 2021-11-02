@@ -2,6 +2,7 @@
 
 
 #include "Actions/SAsyncAction_AttributeChanged.h"
+#include "Attributes/SAttributeComponent.h"
 
 
 USAsyncAction_AttributeChanged* USAsyncAction_AttributeChanged::ListenForAttributeChange(USAttributeComponent* AttributeComponent, FGameplayTag Tag)
@@ -36,6 +37,6 @@ void USAsyncAction_AttributeChanged::AttributeChanged(const FAttribute Attribute
 {
 	if (TagToListenFor.MatchesTagExact(Attribute.Tag))
 	{
-		OnAttributeChanged.Broadcast(Attribute, Attribute.CurrentValue, Attribute.BaseValue);
+		OnAttributeChanged.Broadcast(Attribute);
 	}
 }

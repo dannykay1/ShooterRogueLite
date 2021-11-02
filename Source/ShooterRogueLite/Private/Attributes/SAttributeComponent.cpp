@@ -2,7 +2,6 @@
 
 
 #include "Attributes/SAttributeComponent.h"
-#include "Attributes/SStartingAttributesData.h"
 
 
 // Sets default values for this component's properties
@@ -20,13 +19,17 @@ void USAttributeComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (ensureAlways(DefaultAttribute))
+	if (ensure(AttributeTable))
 	{
-		Attributes.Empty();
+		TArray<FAttribute*> Rows;
+		AttributeTable->GetAllRows("", Rows);
 
-		for (auto& Attribute : DefaultAttribute->Attributes)
+		for (int32 i = 0; i < Rows.Num(); i++)
 		{
-			Attributes.Add(Attribute.Key, FAttribute(Attribute.Key, Attribute.Value.BaseValue));
+			FGameplayTag Tag = Rows[i]->Tag;
+			float Value = Rows[i]->BaseValue;
+
+			Attributes.Add(Tag, FAttribute(Tag, Value));
 		}
 	}
 }
