@@ -29,6 +29,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = Attribute)
 	UDataTable* AttributeTable;
 
+	UPROPERTY(EditDefaultsOnly, Category = Attribute)
+	FGameplayTag DamageTag;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attribute)
 	TMap<FGameplayTag, FAttribute> Attributes;
 
 public:

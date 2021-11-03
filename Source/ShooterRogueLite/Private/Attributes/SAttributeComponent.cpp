@@ -11,6 +11,8 @@ USAttributeComponent::USAttributeComponent()
 {
 	static ConstructorHelpers::FObjectFinder<UDataTable> Tables(TEXT("DataTable'/Game/Data/Attributes/DT_Default.DT_Default'"));
 	AttributeTable = Tables.Object;
+
+	DamageTag = FGameplayTag::RequestGameplayTag(FName("Attribute.Damage"));
 }
 
 // Called when the game starts
@@ -20,15 +22,18 @@ void USAttributeComponent::BeginPlay()
 
 	if (ensure(AttributeTable))
 	{
+		Attributes.Empty();
+
 		TArray<FAttribute*> Rows;
 		AttributeTable->GetAllRows("", Rows);
 
 		for (int32 i = 0; i < Rows.Num(); i++)
 		{
 			FGameplayTag Tag = Rows[i]->Tag;
-			const float Value = Rows[i]->BaseValue;
+			const float StartValue = Rows[i]->CurrentValue;
+			const float MaxValue = Rows[i]->MaximumValue;
 
-			Attributes.Add(Tag, FAttribute(Tag, Value));
+			Attributes.Add(Tag, FAttribute(Tag, StartValue, MaxValue));
 		}
 	}
 }
@@ -43,6 +48,15 @@ void USAttributeComponent::ModifyAttribute(FGameplayTag Tag, float Delta)
 {
 	for (auto& Attribute : Attributes)
 	{
+		// if (Attribute.Key.MatchesTagExact(DamageTag))
+		// {
+		// }
+		// else if (Attribute.Key.MatchesTagExact(Tag))
+		// {
+		// 	Attribute.Value.ModifyValue(Delta);
+		// 	OnAttributeChanged.Broadcast(Attribute.Value);
+		// }
+
 		if (Attribute.Key.MatchesTagExact(Tag))
 		{
 			Attribute.Value.ModifyValue(Delta);

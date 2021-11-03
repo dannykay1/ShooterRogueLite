@@ -16,23 +16,36 @@ struct SHOOTERROGUELITE_API FAttribute : public FTableRowBase
 
 	FAttribute()
 	{
-		CurrentValue = BaseValue = 0.f;
+		CurrentValue = MaximumValue = 0.f;
 	}
 
-	FAttribute(FGameplayTag DefaultTag, float DefaultValue)
+	// FAttribute(FString TagName, float DefaultValue)
+	// {
+	// 	Tag = FGameplayTag::RequestGameplayTag(FName(*TagName));
+	// 	CurrentValue = BaseValue = DefaultValue;
+	// }
+	//
+	// FAttribute(FGameplayTag DefaultTag, float DefaultValue)
+	// {
+	// 	Tag = DefaultTag;
+	// 	CurrentValue = BaseValue = DefaultValue;
+	// }
+
+	FAttribute(FGameplayTag DefaultTag, float StartingValue, float MaxValue)
 	{
 		Tag = DefaultTag;
-		CurrentValue = BaseValue = DefaultValue;
+		CurrentValue = StartingValue;
+		MaximumValue = MaxValue;
 	}
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayTag Tag;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float CurrentValue;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float BaseValue;
+	float MaximumValue;
 
 	bool MatchesTagExact(FGameplayTag TagToCompare) const
 	{
@@ -41,21 +54,8 @@ struct SHOOTERROGUELITE_API FAttribute : public FTableRowBase
 
 	void ModifyValue(float Delta)
 	{
-		CurrentValue = FMath::Clamp(CurrentValue + Delta, 0.f, BaseValue);
+		CurrentValue = FMath::Clamp(CurrentValue + Delta, 0.f, MaximumValue);
 	}
-};
-
-USTRUCT(BlueprintType)
-struct SHOOTERROGUELITE_API FDamageInfo
-{
-	GENERATED_BODY()
-
-	FDamageInfo()
-	{
-		
-	}
-
-	
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChanged, FAttribute, Attribute);
