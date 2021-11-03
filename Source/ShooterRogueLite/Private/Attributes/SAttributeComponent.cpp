@@ -2,16 +2,15 @@
 
 
 #include "Attributes/SAttributeComponent.h"
+#include "Engine/DataTable.h"
+#include "UObject/ConstructorHelpers.h"
 
 
 // Sets default values for this component's properties
 USAttributeComponent::USAttributeComponent()
 {
-	// Health = FAttribute(FGameplayTag::RequestGameplayTag("Attribute.Health"), 100.f);
-	// Armor = FAttribute(FGameplayTag::RequestGameplayTag("Attribute.Armor"), 100.f);
-	// Speed = FAttribute(FGameplayTag::RequestGameplayTag("Attribute.Speed"), 600.f);
-	// Credits = FAttribute(FGameplayTag::RequestGameplayTag("Attribute.Credits"), 50000.f);
-	// Experience = FAttribute(FGameplayTag::RequestGameplayTag("Attribute.Experience"), 100.f);
+	static ConstructorHelpers::FObjectFinder<UDataTable> Tables(TEXT("DataTable'/Game/Data/Attributes/DT_Default.DT_Default'"));
+	AttributeTable = Tables.Object;
 }
 
 // Called when the game starts
@@ -27,7 +26,7 @@ void USAttributeComponent::BeginPlay()
 		for (int32 i = 0; i < Rows.Num(); i++)
 		{
 			FGameplayTag Tag = Rows[i]->Tag;
-			float Value = Rows[i]->BaseValue;
+			const float Value = Rows[i]->BaseValue;
 
 			Attributes.Add(Tag, FAttribute(Tag, Value));
 		}

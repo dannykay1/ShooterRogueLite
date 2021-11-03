@@ -45,4 +45,17 @@ struct SHOOTERROGUELITE_API FAttribute : public FTableRowBase
 	}
 };
 
+USTRUCT(BlueprintType)
+struct SHOOTERROGUELITE_API FDamageInfo
+{
+	GENERATED_BODY()
+
+	FDamageInfo()
+	{
+		
+	}
+
+	
+};
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChanged, FAttribute, Attribute);

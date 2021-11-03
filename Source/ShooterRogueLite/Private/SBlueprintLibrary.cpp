@@ -4,6 +4,10 @@
 #include "SBlueprintLibrary.h"
 #include "Actions/SActionComponent.h"
 #include "Attributes/SAttributeComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/PlayerController.h"
+#include "DamageTypes/SDamageType.h"
+#include "UI/SHUD.h"
 
 
 USActionComponent* USBlueprintLibrary::GetActionComponent(AActor* Actor)
@@ -37,11 +41,20 @@ USAttributeComponent* USBlueprintLibrary::GetAttributeComponent(AActor* Actor)
 }
 
 bool USBlueprintLibrary::ApplyDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, AController* EventInstigator, AActor* DamageCauser,
-                                     TSubclassOf<UDamageType> DamageType)
+                                     TSubclassOf<USDamageType> DamageType)
 {
+	if (!DamagedActor)
+	{
+		return false;
+	}
+
 	if (USAttributeComponent* AttributeComp = GetAttributeComponent(DamagedActor))
 	{
 		AttributeComp->ModifyAttribute(Tag, -BaseDamage);
+
+		const FText DisplayText = FText::AsNumber(FMath::Abs(BaseDamage));
+		
+		SpawnFloatingText(DamagedActor, DamageType, DamagedActor->GetActorLocation(), DisplayText);
 		return true;
 	}
 
@@ -49,13 +62,51 @@ bool USBlueprintLibrary::ApplyDamage(AActor* DamagedActor, FGameplayTag Tag, flo
 }
 
 bool USBlueprintLibrary::ApplyPointDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, FVector HitLocation, AController* EventInstigator, AActor* DamageCauser,
-                                          TSubclassOf<UDamageType> DamageType)
+                                          TSubclassOf<USDamageType> DamageType)
 {
+	if (!DamagedActor)
+	{
+		return false;
+	}
+
 	if (USAttributeComponent* AttributeComp = GetAttributeComponent(DamagedActor))
 	{
 		AttributeComp->ModifyAttribute(Tag, -BaseDamage);
+
+		const FText DisplayText = FText::AsNumber(FMath::Abs(BaseDamage));
+		
+		SpawnFloatingText(DamagedActor, DamageType, HitLocation, DisplayText);
 		return true;
 	}
 
 	return false;
+}
+
+ASHUD* USBlueprintLibrary::GetHUD(const AActor* Caller)
+{
+	if (!Caller)
+	{
+		return nullptr;
+	}
+
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(Caller->GetWorld(), 0);
+	if (PlayerController)
+	{
+		return Cast<ASHUD>(PlayerController->GetHUD());
+	}
+
+	return nullptr;
+}
+
+void USBlueprintLibrary::SpawnFloatingText(AActor* Caller, TSubclassOf<USDamageType> DamageType, FVector Location, FText DisplayText)
+{
+	if (!DamageType)
+	{
+		return;
+	}
+
+	if (ASHUD* HUD = GetHUD(Caller))
+	{
+		HUD->SpawnFloatingText(DamageType, Location, DisplayText);
+	}
 }

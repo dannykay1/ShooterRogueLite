@@ -7,10 +7,12 @@
 #include "UObject/Object.h"
 #include "SBlueprintLibrary.generated.h"
 
+class USDamageType;
 class USActionComponent;
 class USAttributeComponent;
 class AController;
 class UDamageType;
+class ASHUD;
 
 /**
  * Game-specific blueprint library.
@@ -22,7 +24,6 @@ class SHOOTERROGUELITE_API USBlueprintLibrary : public UObject
 	GENERATED_BODY()
 
 public:
-
 	UFUNCTION(BlueprintPure, Category = Game)
 	static USActionComponent* GetActionComponent(AActor* Actor);
 
@@ -33,8 +34,15 @@ public:
 	static USAttributeComponent* GetAttributeComponent(AActor* Actor);
 
 	UFUNCTION(BlueprintCallable, Category = Game)
-	static bool ApplyDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, AController* EventInstigator, AActor* DamageCauser, TSubclassOf<UDamageType> DamageType);
+	static bool ApplyDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, AController* EventInstigator, AActor* DamageCauser, TSubclassOf<USDamageType> DamageType);
 
 	UFUNCTION(BlueprintCallable, Category = Game)
-	static bool ApplyPointDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, FVector HitLocation, AController* EventInstigator, AActor* DamageCauser, TSubclassOf<UDamageType> DamageType);
+	static bool ApplyPointDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, FVector HitLocation, AController* EventInstigator, AActor* DamageCauser,
+	                             TSubclassOf<USDamageType> DamageType);
+
+	UFUNCTION(BlueprintPure, Category = Game)
+	static ASHUD* GetHUD(const AActor* Caller);
+
+	UFUNCTION(BlueprintCallable, Category = Game)
+	static void SpawnFloatingText(AActor* Caller, TSubclassOf<USDamageType> DamageType, FVector Location, FText DisplayText);
 };

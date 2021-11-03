@@ -21,10 +21,10 @@ UWorld* USAction::GetWorld() const
 {
 	AActor* Actor = Cast<AActor>(GetOuter());
 
-	if (!ensure(Actor))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No Outer!"));
-	}
+	// if (!ensure(Actor))
+	// {
+	// 	UE_LOG(LogTemp, Warning, TEXT("No Outer!"));
+	// }
 
 	return Actor ? Actor->GetWorld() : nullptr;
 }
