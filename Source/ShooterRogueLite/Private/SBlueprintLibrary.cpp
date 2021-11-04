@@ -50,7 +50,7 @@ bool USBlueprintLibrary::ApplyDamage(AActor* DamagedActor, FGameplayTag Tag, flo
 
 	if (USAttributeComponent* AttributeComp = GetAttributeComponent(DamagedActor))
 	{
-		AttributeComp->ModifyAttribute(Tag, -BaseDamage);
+		AttributeComp->ModifyHealthAttribute(-BaseDamage);
 
 		const FText DisplayText = FText::AsNumber(FMath::Abs(BaseDamage));
 		
@@ -71,7 +71,7 @@ bool USBlueprintLibrary::ApplyPointDamage(AActor* DamagedActor, FGameplayTag Tag
 
 	if (USAttributeComponent* AttributeComp = GetAttributeComponent(DamagedActor))
 	{
-		AttributeComp->ModifyAttribute(Tag, -BaseDamage);
+		AttributeComp->ModifyHealthAttribute(-BaseDamage);
 
 		const FText DisplayText = FText::AsNumber(FMath::Abs(BaseDamage));
 		

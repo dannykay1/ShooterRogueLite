@@ -36,6 +36,8 @@ void USAttributeComponent::BeginPlay()
 			Attributes.Add(Tag, FAttribute(Tag, StartValue, MaxValue));
 		}
 	}
+
+	Attributes.Add(DamageTag, FAttribute(DamageTag, 0.f, 0.f));
 }
 
 // Called every frame
@@ -44,23 +46,65 @@ void USAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
+bool USAttributeComponent::GetAttributeByTag(FGameplayTag Tag, FAttribute& Attribute) const
+{
+	for (auto& ATT : Attributes)
+	{
+		if (ATT.Key.MatchesTagExact(Tag))
+		{
+			Attribute = Attributes[Tag];
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void USAttributeComponent::ModifyAttribute(FGameplayTag Tag, float Delta)
 {
-	for (auto& Attribute : Attributes)
+	if (Tag.MatchesTagExact(DamageTag))
 	{
-		// if (Attribute.Key.MatchesTagExact(DamageTag))
-		// {
-		// }
-		// else if (Attribute.Key.MatchesTagExact(Tag))
-		// {
-		// 	Attribute.Value.ModifyValue(Delta);
-		// 	OnAttributeChanged.Broadcast(Attribute.Value);
-		// }
-
-		if (Attribute.Key.MatchesTagExact(Tag))
+		ModifyHealthAttribute(Delta);
+	}
+	else
+	{
+		FAttribute Attribute;
+		if (GetAttributeByTag(Tag, Attribute))
 		{
-			Attribute.Value.ModifyValue(Delta);
-			OnAttributeChanged.Broadcast(Attribute.Value);
+			Attribute.ModifyValue(Delta);
+			OnAttributeChanged.Broadcast(Attribute);
+
+			Attributes[Tag] = Attribute;
 		}
+	}
+}
+
+void USAttributeComponent::ModifyHealthAttribute(float Delta)
+{
+	FAttribute Health;
+	const FGameplayTag HealthTag = FGameplayTag::RequestGameplayTag(FName("Attribute.Health"));
+
+	FAttribute Armor;
+	const FGameplayTag ArmorTag = FGameplayTag::RequestGameplayTag(FName("Attribute.Armor"));
+
+	Delta = FMath::Abs(Delta);
+
+	if (GetAttributeByTag(ArmorTag, Armor))
+	{
+		const float DamageAfterArmor = Delta - Armor.CurrentValue;
+
+		ModifyAttribute(ArmorTag, -Delta);
+
+		if (GetAttributeByTag(HealthTag, Health))
+		{
+			if (DamageAfterArmor > 0.f)
+			{
+				ModifyAttribute(HealthTag, -DamageAfterArmor);
+			}
+		}
+	}
+	else
+	{
+		ModifyAttribute(HealthTag, -Delta);
 	}
 }

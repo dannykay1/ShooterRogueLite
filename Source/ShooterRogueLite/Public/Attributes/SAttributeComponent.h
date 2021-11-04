@@ -43,5 +43,11 @@ public:
 	FOnAttributeChanged OnAttributeChanged;
 
 	UFUNCTION(BlueprintCallable, Category = Attribute)
+	bool GetAttributeByTag(FGameplayTag Tag, FAttribute& Attribute) const;
+
+	UFUNCTION(BlueprintCallable, Category = Attribute)
 	void ModifyAttribute(FGameplayTag Tag, float Delta);
+
+	UFUNCTION(BlueprintCallable, Category = Attribute)
+	void ModifyHealthAttribute(float Delta);
 };

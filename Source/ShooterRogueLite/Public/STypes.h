@@ -52,7 +52,7 @@ struct SHOOTERROGUELITE_API FAttribute : public FTableRowBase
 		return Tag.MatchesTagExact(TagToCompare);
 	}
 
-	void ModifyValue(float Delta)
+	void ModifyValue(const float Delta)
 	{
 		CurrentValue = FMath::Clamp(CurrentValue + Delta, 0.f, MaximumValue);
 	}
