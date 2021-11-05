@@ -29,7 +29,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = Attribute)
 	UDataTable* AttributeTable;
 
-	UPROPERTY(EditDefaultsOnly, Category = Attribute)
+	UPROPERTY(VisibleDefaultsOnly, Category = Attribute)
 	FGameplayTag DamageTag;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attribute)

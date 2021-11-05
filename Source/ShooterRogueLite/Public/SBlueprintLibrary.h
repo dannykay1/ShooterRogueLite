@@ -34,10 +34,10 @@ public:
 	static USAttributeComponent* GetAttributeComponent(AActor* Actor);
 
 	UFUNCTION(BlueprintCallable, Category = Game)
-	static bool ApplyDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, AController* EventInstigator, AActor* DamageCauser, TSubclassOf<USDamageType> DamageType);
+	static bool ApplyDamage(AActor* DamagedActor, float BaseDamage, AController* EventInstigator, AActor* DamageCauser, TSubclassOf<USDamageType> DamageType);
 
 	UFUNCTION(BlueprintCallable, Category = Game)
-	static bool ApplyPointDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, FVector HitLocation, AController* EventInstigator, AActor* DamageCauser,
+	static bool ApplyPointDamage(AActor* DamagedActor, float BaseDamage, FVector HitLocation, AController* EventInstigator, AActor* DamageCauser,
 	                             TSubclassOf<USDamageType> DamageType);
 
 	UFUNCTION(BlueprintPure, Category = Game)

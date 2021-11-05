@@ -40,8 +40,7 @@ USAttributeComponent* USBlueprintLibrary::GetAttributeComponent(AActor* Actor)
 	return nullptr;
 }
 
-bool USBlueprintLibrary::ApplyDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, AController* EventInstigator, AActor* DamageCauser,
-                                     TSubclassOf<USDamageType> DamageType)
+bool USBlueprintLibrary::ApplyDamage(AActor* DamagedActor, float BaseDamage, AController* EventInstigator, AActor* DamageCauser, TSubclassOf<USDamageType> DamageType)
 {
 	if (!DamagedActor)
 	{
@@ -53,7 +52,7 @@ bool USBlueprintLibrary::ApplyDamage(AActor* DamagedActor, FGameplayTag Tag, flo
 		AttributeComp->ModifyHealthAttribute(-BaseDamage);
 
 		const FText DisplayText = FText::AsNumber(FMath::Abs(BaseDamage));
-		
+
 		SpawnFloatingText(DamagedActor, DamageType, DamagedActor->GetActorLocation(), DisplayText);
 		return true;
 	}
@@ -61,7 +60,7 @@ bool USBlueprintLibrary::ApplyDamage(AActor* DamagedActor, FGameplayTag Tag, flo
 	return false;
 }
 
-bool USBlueprintLibrary::ApplyPointDamage(AActor* DamagedActor, FGameplayTag Tag, float BaseDamage, FVector HitLocation, AController* EventInstigator, AActor* DamageCauser,
+bool USBlueprintLibrary::ApplyPointDamage(AActor* DamagedActor, float BaseDamage, FVector HitLocation, AController* EventInstigator, AActor* DamageCauser,
                                           TSubclassOf<USDamageType> DamageType)
 {
 	if (!DamagedActor)
@@ -74,7 +73,7 @@ bool USBlueprintLibrary::ApplyPointDamage(AActor* DamagedActor, FGameplayTag Tag
 		AttributeComp->ModifyHealthAttribute(-BaseDamage);
 
 		const FText DisplayText = FText::AsNumber(FMath::Abs(BaseDamage));
-		
+
 		SpawnFloatingText(DamagedActor, DamageType, HitLocation, DisplayText);
 		return true;
 	}
