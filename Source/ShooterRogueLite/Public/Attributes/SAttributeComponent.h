@@ -32,7 +32,7 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = Attribute)
 	FGameplayTag DamageTag;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attribute)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Attribute)
 	TMap<FGameplayTag, FAttribute> Attributes;
 
 public:

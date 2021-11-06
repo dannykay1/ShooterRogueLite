@@ -29,7 +29,7 @@ void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 	FString Msg = GetNameSafe(GetOwner()) + ": " + ActiveGameplayTags.ToStringSimple();
 
-	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, Msg);
+	//GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, Msg);
 }
 
 void USActionComponent::AddAction(AActor* Instigator, TSubclassOf<USAction> ActionClass)

@@ -49,9 +49,11 @@ bool USBlueprintLibrary::ApplyDamage(AActor* DamagedActor, float BaseDamage, ACo
 
 	if (USAttributeComponent* AttributeComp = GetAttributeComponent(DamagedActor))
 	{
+		BaseDamage = FMath::Abs(BaseDamage);
+
 		AttributeComp->ModifyHealthAttribute(-BaseDamage);
 
-		const FText DisplayText = FText::AsNumber(FMath::Abs(BaseDamage));
+		const FText DisplayText = FText::AsNumber(BaseDamage);
 
 		SpawnFloatingText(DamagedActor, DamageType, DamagedActor->GetActorLocation(), DisplayText);
 		return true;
@@ -70,9 +72,11 @@ bool USBlueprintLibrary::ApplyPointDamage(AActor* DamagedActor, float BaseDamage
 
 	if (USAttributeComponent* AttributeComp = GetAttributeComponent(DamagedActor))
 	{
+		BaseDamage = FMath::Abs(BaseDamage);
+
 		AttributeComp->ModifyHealthAttribute(-BaseDamage);
 
-		const FText DisplayText = FText::AsNumber(FMath::Abs(BaseDamage));
+		const FText DisplayText = FText::AsNumber(BaseDamage);
 
 		SpawnFloatingText(DamagedActor, DamageType, HitLocation, DisplayText);
 		return true;

@@ -50,5 +50,5 @@ public:
 	void AddAbilities();
 
 	/** Removes the weapon's abilities from the owner. */
-	void RemoveAbilities();
+	void RemoveAbilities() const;
 };

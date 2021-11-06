@@ -47,7 +47,7 @@ void ASWeapon::AddAbilities()
 		return;
 }
 
-void ASWeapon::RemoveAbilities()
+void ASWeapon::RemoveAbilities() const
 {
 	AActor* MyOwner = GetOwner();
 	if (!ensure(MyOwner))

@@ -9,6 +9,8 @@
 // Sets default values for this component's properties
 USAttributeComponent::USAttributeComponent()
 {
+	PrimaryComponentTick.bCanEverTick = true;
+
 	static ConstructorHelpers::FObjectFinder<UDataTable> Tables(TEXT("DataTable'/Game/Data/Attributes/DT_Default.DT_Default'"));
 	AttributeTable = Tables.Object;
 
@@ -19,14 +21,14 @@ USAttributeComponent::USAttributeComponent()
 void USAttributeComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	Attributes.Empty();
+	
 	if (ensure(AttributeTable))
-	{
-		Attributes.Empty();
-
+	{	
 		TArray<FAttribute*> Rows;
 		AttributeTable->GetAllRows("", Rows);
-
+	
 		for (int32 i = 0; i < Rows.Num(); i++)
 		{
 			FGameplayTag Tag = Rows[i]->Tag;
@@ -48,9 +50,9 @@ void USAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 bool USAttributeComponent::GetAttributeByTag(FGameplayTag Tag, FAttribute& Attribute) const
 {
-	for (auto& ATT : Attributes)
+	for (const TPair<FGameplayTag, FAttribute>& Pair : Attributes)
 	{
-		if (ATT.Key.MatchesTagExact(Tag))
+		if (Pair.Key.MatchesTagExact(Tag))
 		{
 			Attribute = Attributes[Tag];
 			return true;

@@ -2,3 +2,8 @@
 
 
 #include "Framework/SGameInstance.h"
+
+
+USGameInstance::USGameInstance()
+{
+}
