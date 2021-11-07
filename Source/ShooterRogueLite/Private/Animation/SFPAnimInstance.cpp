@@ -12,7 +12,7 @@
 
 USFPAnimInstance::USFPAnimInstance()
 {
-	AimDownSightsTag = FGameplayTag::RequestGameplayTag("Action.AimDownSights");
+	AimDownSightsTag = FGameplayTag::RequestGameplayTag("Action.Animation.AimDownSights");
 	bIsAimingDownSights = false;
 
 	SprintingTag = FGameplayTag::RequestGameplayTag("Action.Sprint");
@@ -20,6 +20,14 @@ USFPAnimInstance::USFPAnimInstance()
 
 	bIsMoving = false;
 	Speed = 0.0f;
+
+	InterpSpeedLeftHand = 15.f;
+	
+	InterpSpeedSwayRotation = 5.f;
+	
+	InterpSpeedRecoil = 10.f;
+	
+	InterpSpeedFinalRecoil = 15.f;
 }
 
 void USFPAnimInstance::NativeInitializeAnimation()
@@ -63,7 +71,7 @@ void USFPAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	CalculateRotators(DeltaSeconds);
 	CalculateRecoil(DeltaSeconds);
 
-	LeftHandIKTransform = CharacterOwner->GetLeftHandTransform();
+	LeftHandIKTransform = UKismetMathLibrary::TInterpTo(LeftHandIKTransform, CharacterOwner->GetLeftHandTransform(), DeltaSeconds, InterpSpeedLeftHand);
 }
 
 void USFPAnimInstance::InitializeTransforms()
@@ -92,7 +100,7 @@ void USFPAnimInstance::CalculateRotators(float DeltaSeconds)
 
 	const FRotator DeltaRotation = ControlRotation - OldRotation;
 
-	UnmodifiedRotation = UKismetMathLibrary::RInterpTo(UnmodifiedRotation, DeltaRotation, DeltaSeconds, 5.f);
+	UnmodifiedRotation = UKismetMathLibrary::RInterpTo(UnmodifiedRotation, DeltaRotation, DeltaSeconds, InterpSpeedSwayRotation);
 
 	SwayRotation.Roll = UnmodifiedRotation.Pitch * 3.f;
 	SwayRotation.Pitch = 0.f;
@@ -103,9 +111,9 @@ void USFPAnimInstance::CalculateRotators(float DeltaSeconds)
 
 void USFPAnimInstance::CalculateRecoil(float DeltaSeconds)
 {
-	RecoilTransform = UKismetMathLibrary::TInterpTo(RecoilTransform, FTransform::Identity, DeltaSeconds, 10.f);
-
-	FinalRecoilTransform = UKismetMathLibrary::TInterpTo(FinalRecoilTransform, RecoilTransform, DeltaSeconds, 15.f);
+	RecoilTransform = UKismetMathLibrary::TInterpTo(RecoilTransform, FTransform::Identity, DeltaSeconds, InterpSpeedRecoil);
+	
+	FinalRecoilTransform = UKismetMathLibrary::TInterpTo(FinalRecoilTransform, RecoilTransform, DeltaSeconds, InterpSpeedFinalRecoil);
 }
 
 void USFPAnimInstance::SetRecoil(FTransform NewRecoil)

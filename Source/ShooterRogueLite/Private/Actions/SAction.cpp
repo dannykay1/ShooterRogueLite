@@ -30,13 +30,9 @@ bool USAction::CanActivateAction(AActor* Instigator)
 		return false;
 	}
 
-	FString Msg = GetNameSafe(this) + " CanActivate?";
-	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, Msg);
-
 	const USActionComponent* Comp = GetOwningComponent();
 
-	return !Comp->ActiveGameplayTags.HasAny(BlockAbilitiesWithTag) && CanStart(Instigator);
+	return !Comp->ActiveGameplayTags.HasAny(BlockedTags) && CanStart(Instigator);
 }
 
 bool USAction::CanStart_Implementation(AActor* Instigator)

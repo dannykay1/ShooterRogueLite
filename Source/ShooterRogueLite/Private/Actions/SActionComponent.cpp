@@ -109,7 +109,7 @@ void USActionComponent::CancelAbilitiesWithTags(AActor* Instigator, FGameplayTag
 			if (Action->GetIsRunning())
 			{
 				FString FailedMsg = FString::Printf(TEXT("Cancelled: %s"), *Action->AbilityTag.ToString());
-				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FailedMsg);
+				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FailedMsg);
 
 				Action->StopAction(Instigator);
 			}

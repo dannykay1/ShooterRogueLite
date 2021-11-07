@@ -9,9 +9,7 @@
 
 class ASCharacter;
 
-/**
- * Anim instance class to handle any first person animations.
- */
+/** Anim instance class to handle any first person animations. */
 UCLASS()
 class SHOOTERROGUELITE_API USFPAnimInstance : public UAnimInstance
 {
@@ -108,4 +106,16 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
 	float AimDelta;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
+	float InterpSpeedLeftHand;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
+	float InterpSpeedSwayRotation;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
+	float InterpSpeedRecoil;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
+	float InterpSpeedFinalRecoil;
 };

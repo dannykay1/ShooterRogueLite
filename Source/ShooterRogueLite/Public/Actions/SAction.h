@@ -40,9 +40,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Tags)
 	FGameplayTagContainer CancelAbilitiesWithTag;
 
-	/* Actions with these tags will be blocked while this action is active. */
+	/** Action can only start if OwningActor has none of these Tags applied */
 	UPROPERTY(EditDefaultsOnly, Category = Tags)
-	FGameplayTagContainer BlockAbilitiesWithTag;
+	FGameplayTagContainer BlockedTags;
 
 	/* Gets the world from the Actor Owner. */
 	virtual UWorld* GetWorld() const override;
