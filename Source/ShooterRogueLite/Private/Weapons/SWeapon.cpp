@@ -2,7 +2,6 @@
 
 
 #include "Weapons/SWeapon.h"
-#include "Widgets/SInteractionWidgetComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 
 
@@ -13,8 +12,6 @@ ASWeapon::ASWeapon()
 	SetRootComponent(MeshComp);
 	MeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	MeshComp->CastShadow = false;
-
-	InteractionWidgetComp = CreateDefaultSubobject<USInteractionWidgetComponent>(TEXT("InteractionWidgetComp"));
 
 	SightSocketName = "Sight";
 	LeftHandSocketName = "LeftHand";

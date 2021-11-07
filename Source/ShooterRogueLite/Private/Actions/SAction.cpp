@@ -29,8 +29,12 @@ bool USAction::CanActivateAction(AActor* Instigator)
 	{
 		return false;
 	}
+
+	FString Msg = GetNameSafe(this) + " CanActivate?";
 	
-	USActionComponent* Comp = GetOwningComponent();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, Msg);
+
+	const USActionComponent* Comp = GetOwningComponent();
 
 	return !Comp->ActiveGameplayTags.HasAny(BlockAbilitiesWithTag) && CanStart(Instigator);
 }
@@ -52,7 +56,7 @@ void USAction::StartAction(AActor* Instigator)
 
 void USAction::StopAction(AActor* Instigator)
 {
-	ensureAlways(bIsRunning);
+	//ensureAlways(bIsRunning);
 	
 	USActionComponent* Comp = GetOwningComponent();
 	Comp->ActiveGameplayTags.RemoveTags(GrantedTags);

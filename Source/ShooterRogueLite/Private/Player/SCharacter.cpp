@@ -60,9 +60,6 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ASCharacter::BeginInteract);
-	PlayerInputComponent->BindAction("Interact", IE_Released, this, &ASCharacter::EndInteract);
 }
 
 void ASCharacter::MoveForward(float Value)
@@ -73,14 +70,4 @@ void ASCharacter::MoveForward(float Value)
 void ASCharacter::MoveRight(float Value)
 {
 	AddMovementInput(GetActorRightVector(), Value);
-}
-
-void ASCharacter::BeginInteract()
-{
-	InteractionComponent->BeginInteract();
-}
-
-void ASCharacter::EndInteract()
-{
-	InteractionComponent->EndInteract();
 }

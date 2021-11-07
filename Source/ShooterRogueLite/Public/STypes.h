@@ -175,3 +175,12 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSlottedItemChanged, FSItemSlot, 
 
 /** Delegate called when the entire inventory has been loaded, all items may have been replaced */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryLoaded);
+
+UENUM(BlueprintType)
+enum class EItemRarity : uint8
+{
+	Common		UMETA(DisplayName = "Common"),
+	Uncommon	UMETA(DisplayName = "Uncommon"),
+	Rare		UMETA(DisplayName = "Rare"),
+	Legendary	UMETA(DisplayName = "Legendary")
+};

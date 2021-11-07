@@ -55,14 +55,14 @@ void USInteractionComponent::PerformInteractionCheck()
 
 	CharacterOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
 
-	FVector End = EyeLocation + (EyeRotation.Vector() * InteractionCheckDistance);
+	const FVector End = EyeLocation + (EyeRotation.Vector() * InteractionCheckDistance);
 
 	FHitResult Hit;
 
 	FCollisionShape Shape;
 	Shape.SetSphere(InteractionCheckRadius);
 
-	bool bBlockingHit = GetWorld()->SweepSingleByObjectType(Hit, EyeLocation, End, FQuat::Identity, QueryParams, Shape);
+	const bool bBlockingHit = GetWorld()->SweepSingleByObjectType(Hit, EyeLocation, End, FQuat::Identity, QueryParams, Shape);
 
 	FColor LineColor = FColor::Red;
 
@@ -70,8 +70,8 @@ void USInteractionComponent::PerformInteractionCheck()
 	{
 		if (USInteractionWidgetComponent* Interactable = Cast<USInteractionWidgetComponent>(Hit.GetActor()->GetComponentByClass(USInteractionWidgetComponent::StaticClass())))
 		{
-			float Distance = Hit.Distance;
-			float InteractionDistance = Interactable->InteractionDistance;
+			const float Distance = Hit.Distance;
+			const float InteractionDistance = Interactable->InteractionDistance;
 
 			if (Interactable != GetInteractable() && Distance <= InteractionDistance)
 			{
@@ -140,7 +140,7 @@ void USInteractionComponent::BeginInteract()
 	{
 		Interactable->BeginInteract(CharacterOwner);
 
-		float InteractionTime = Interactable->InteractionTime;
+		const float InteractionTime = Interactable->InteractionTime;
 
 		if (FMath::IsNearlyZero(InteractionTime))
 		{

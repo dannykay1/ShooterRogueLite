@@ -22,7 +22,7 @@ USActionComponent* USBlueprintLibrary::GetActionComponent(AActor* Actor)
 
 bool USBlueprintLibrary::ActorHasTag(AActor* Actor, FGameplayTag Tag)
 {
-	if (USActionComponent* ActionComp = GetActionComponent(Actor))
+	if (const USActionComponent* ActionComp = GetActionComponent(Actor))
 	{
 		return ActionComp->ActiveGameplayTags.HasTagExact(Tag);
 	}

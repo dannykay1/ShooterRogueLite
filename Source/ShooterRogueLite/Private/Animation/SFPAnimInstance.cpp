@@ -2,6 +2,8 @@
 
 
 #include "Animation/SFPAnimInstance.h"
+
+#include "SBlueprintLibrary.h"
 #include "Actions/SActionComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -10,9 +12,12 @@
 
 USFPAnimInstance::USFPAnimInstance()
 {
+	AimDownSightsTag = FGameplayTag::RequestGameplayTag("Action.AimDownSights");
+	bIsAimingDownSights = false;
+
 	SprintingTag = FGameplayTag::RequestGameplayTag("Action.Sprint");
 	bIsSprinting = false;
-	
+
 	bIsMoving = false;
 	Speed = 0.0f;
 }
@@ -36,10 +41,9 @@ void USFPAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	if (!CharacterOwner) return;
 
-	if (CharacterOwner->GetActionComponent())
-	{
-		bIsSprinting = CharacterOwner->GetActionComponent()->ActiveGameplayTags.HasTag(SprintingTag);
-	}
+	bIsAimingDownSights = USBlueprintLibrary::ActorHasTag(CharacterOwner, AimDownSightsTag);
+
+	bIsSprinting = USBlueprintLibrary::ActorHasTag(CharacterOwner, SprintingTag);
 
 	FVector Velocity = CharacterOwner->GetVelocity();
 
@@ -59,7 +63,7 @@ void USFPAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	CalculateRotators(DeltaSeconds);
 	CalculateRecoil(DeltaSeconds);
 
-	LeftHandIKTransform = GetLeftHandIKTransform();
+	LeftHandIKTransform = CharacterOwner->GetLeftHandTransform();
 }
 
 void USFPAnimInstance::InitializeTransforms()
@@ -70,15 +74,23 @@ void USFPAnimInstance::InitializeTransforms()
 
 void USFPAnimInstance::InitializeTransforms_Delayed()
 {
-	SightTransform = GetSightTransform();
-	RelativeHandTransform = GetRelativeHandTransform();
+	if (CharacterOwner)
+	{
+		SightTransform = CharacterOwner->GetAimDownSightTransform();
+		RelativeHandTransform = CharacterOwner->GetRightHandSocketTransform();
+	}
+	else if (TryGetPawnOwner())
+	{
+		SightTransform = RelativeHandTransform = TryGetPawnOwner()->GetActorTransform();
+		UE_LOG(LogTemp, Fatal, TEXT("InitializeTransforms_Delayed: CharacerOwner is nullptr!"));
+	}
 }
 
 void USFPAnimInstance::CalculateRotators(float DeltaSeconds)
 {
-	FRotator ControlRotation = CharacterOwner->GetControlRotation();
+	const FRotator ControlRotation = CharacterOwner->GetControlRotation();
 
-	FRotator DeltaRotation = ControlRotation - OldRotation;
+	const FRotator DeltaRotation = ControlRotation - OldRotation;
 
 	UnmodifiedRotation = UKismetMathLibrary::RInterpTo(UnmodifiedRotation, DeltaRotation, DeltaSeconds, 5.f);
 

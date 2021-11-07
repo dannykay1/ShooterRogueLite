@@ -69,10 +69,13 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Interaction)
 	void Interact();
 
+	UFUNCTION(BlueprintCallable, Category = Interaction)
 	void BeginInteract();
+
+	UFUNCTION(BlueprintCallable, Category = Interaction)
     void EndInteract();
 
 	/* True if interacting with an item that has an interaction time. */

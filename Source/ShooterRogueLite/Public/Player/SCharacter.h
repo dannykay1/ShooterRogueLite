@@ -46,9 +46,6 @@ protected:
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
-	void BeginInteract();
-	void EndInteract();
-
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -64,4 +61,13 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE USActionComponent* GetActionComponent() const { return ActionComponent; }
+
+	UFUNCTION(BlueprintPure, BlueprintImplementableEvent, Category = Animation)
+	FTransform GetAimDownSightTransform() const;
+	
+	UFUNCTION(BlueprintPure, BlueprintImplementableEvent, Category = Animation)
+	FTransform GetRightHandSocketTransform() const;
+	
+	UFUNCTION(BlueprintPure, BlueprintImplementableEvent, Category = Animation)
+	FTransform GetLeftHandTransform() const;
 };

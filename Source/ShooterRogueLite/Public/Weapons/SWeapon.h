@@ -7,7 +7,6 @@
 #include "SWeapon.generated.h"
 
 class USkeletalMeshComponent;
-class USInteractionWidgetComponent;
 
 UCLASS()
 class SHOOTERROGUELITE_API ASWeapon : public AActor
@@ -25,10 +24,6 @@ protected:
 	/* Weapon mesh. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
 	USkeletalMeshComponent* MeshComp;
-
-	/* Allows for player interaction, such as picking up this weapon. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
-	USInteractionWidgetComponent* InteractionWidgetComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Sockets)
 	FName SightSocketName;

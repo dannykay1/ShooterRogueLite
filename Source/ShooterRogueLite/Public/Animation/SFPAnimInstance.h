@@ -38,15 +38,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Animation)
 	ASCharacter* CharacterOwner;
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Animation)
-	FTransform GetSightTransform();
-
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Animation)
-	FTransform GetRelativeHandTransform();
-
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Animation)
-	FTransform GetLeftHandIKTransform();
-
 	void InitializeTransforms_Delayed();
 	void CalculateRotators(float DeltaSeconds);
 	void CalculateRecoil(float DeltaSeconds);
@@ -62,6 +53,14 @@ protected:
 	/* Tag on the Action component to determine if character is sprinting. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
 	FGameplayTag SprintingTag;
+
+	/* Is character sprinting? True if ActionComponent has SprintingTag. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
+	uint8 bIsAimingDownSights : 1;
+
+	/* Tag on the Action component to determine if character is sprinting. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
+	FGameplayTag AimDownSightsTag;
 
 	/* Is character falling?*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)

@@ -29,7 +29,7 @@ void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 	FString Msg = GetNameSafe(GetOwner()) + ": " + ActiveGameplayTags.ToStringSimple();
 
-	//GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, Msg);
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Yellow, Msg);
 }
 
 void USActionComponent::AddAction(AActor* Instigator, TSubclassOf<USAction> ActionClass)
@@ -66,14 +66,14 @@ bool USActionComponent::StartAction(AActor* Instigator, FGameplayTag ActionTag)
 	{
 		if (Action && Action->AbilityTag.MatchesTagExact(ActionTag))
 		{
-			CancelAbilitiesWithTags(Instigator, Action->CancelAbilitiesWithTag);
-
 			if (!Action->CanActivateAction(Instigator))
 			{
 				FString FailedMsg = FString::Printf(TEXT("Failed to run: %s"), *ActionTag.ToString());
 				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FailedMsg);
 				continue;
 			}
+
+			CancelAbilitiesWithTags(Instigator, Action->CancelAbilitiesWithTag);
 
 			Action->StartAction(Instigator);
 			return true;

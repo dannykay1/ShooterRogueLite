@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "STypes.h"
 #include "Engine/DataAsset.h"
 #include "SItem.generated.h"
 
@@ -21,7 +22,8 @@ class SHOOTERROGUELITE_API USItem : public UPrimaryDataAsset
 public:
 	/* Sets default values. */
 	USItem()
-		: ItemName(FText::FromString("Name of the item"))
+		: Rarity(EItemRarity::Common)
+		, ItemName(FText::FromString("Name of the item"))
 		, ItemDescription(FText::FromString("Description of what the item does"))
 		, MaxCount(1)
 	{}
@@ -29,6 +31,9 @@ public:
 	/* Type of this item, set in native parent class */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Item)
 	FPrimaryAssetType ItemType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Item)
+	EItemRarity Rarity;
 
 	/** User-visible short name */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Item)
