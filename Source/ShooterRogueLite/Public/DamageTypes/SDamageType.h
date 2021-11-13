@@ -7,6 +7,7 @@
 #include "SDamageType.generated.h"
 
 class ASFloatingText;
+class UUserWidget;
 
 /**
  * Base damage type class to handle any feedback from taking damage.
@@ -21,9 +22,11 @@ public:
 	/* Sets default values. */
 	USDamageType();
 
+	/* Widget that handles the damage text behavior. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = FloatingText)
-	TSubclassOf<ASFloatingText> FloatingTextClass;
+	TSubclassOf<UUserWidget> FloatingTextClass;
 	
+	/* Color of the damage text. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = FloatingText)
 	FLinearColor Color;
 };

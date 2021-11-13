@@ -19,7 +19,7 @@ public:
 	ASHUD();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = FloatingText)
-	void SpawnFloatingText(TSubclassOf<USDamageType> DamageType, const FVector Location, const FText& DisplayText);
+	void SpawnFloatingText(TSubclassOf<USDamageType> DamageType, const FVector DamageLocation, const FText& DisplayText);
 
 protected:
 	// Called when the game starts or when spawned
