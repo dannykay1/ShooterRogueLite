@@ -3,7 +3,7 @@
 
 #include "Widgets/SInteractionWidgetComponent.h"
 #include "Components/SInteractionComponent.h"
-#include "Player/SCharacter.h"
+#include "Player/SPlayerCharacter.h"
 #include "Widgets/SInteractionWidget.h"
 
 
@@ -74,12 +74,12 @@ float USInteractionWidgetComponent::GetInteractPercentage() const
 	return 1.f - FMath::Abs(InteractionComponent->GetRemainingInteractionTime() / InteractionTime);
 }
 
-bool USInteractionWidgetComponent::CanInteract(ASCharacter* Character) const
+bool USInteractionWidgetComponent::CanInteract(ASPlayerCharacter* Character) const
 {
 	return IsActive() && GetOwner() && Character;
 }
 
-void USInteractionWidgetComponent::BeginFocus(ASCharacter* Character)
+void USInteractionWidgetComponent::BeginFocus(ASPlayerCharacter* Character)
 {
 	if (!GetOwner() || !Character)
 		return;
@@ -102,7 +102,7 @@ void USInteractionWidgetComponent::BeginFocus(ASCharacter* Character)
 	RefreshWidget();
 }
 
-void USInteractionWidgetComponent::EndFocus(ASCharacter* Character)
+void USInteractionWidgetComponent::EndFocus(ASPlayerCharacter* Character)
 {
 	if (!GetOwner() || !Character)
 		return;
@@ -123,7 +123,7 @@ void USInteractionWidgetComponent::EndFocus(ASCharacter* Character)
 	}
 }
 
-void USInteractionWidgetComponent::BeginInteract(ASCharacter* Character)
+void USInteractionWidgetComponent::BeginInteract(ASPlayerCharacter* Character)
 {
 	if (CanInteract(Character))
 	{
@@ -132,13 +132,13 @@ void USInteractionWidgetComponent::BeginInteract(ASCharacter* Character)
 	}
 }
 
-void USInteractionWidgetComponent::EndInteract(ASCharacter* Character)
+void USInteractionWidgetComponent::EndInteract(ASPlayerCharacter* Character)
 {
 	Interactor = nullptr;
 	OnEndInteract.Broadcast(Character);
 }
 
-void USInteractionWidgetComponent::Interact(ASCharacter* Character)
+void USInteractionWidgetComponent::Interact(ASPlayerCharacter* Character) const
 {
 	if (CanInteract(Character))
 	{

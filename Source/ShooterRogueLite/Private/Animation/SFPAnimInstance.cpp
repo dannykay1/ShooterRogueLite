@@ -4,10 +4,9 @@
 #include "Animation/SFPAnimInstance.h"
 
 #include "SBlueprintLibrary.h"
-#include "Actions/SActionComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Player/SCharacter.h"
+#include "Player/SPlayerCharacter.h"
 
 
 USFPAnimInstance::USFPAnimInstance()
@@ -37,7 +36,7 @@ void USFPAnimInstance::NativeInitializeAnimation()
 	APawn* PawnOwner = TryGetPawnOwner();
 	if (PawnOwner)
 	{
-		CharacterOwner = Cast<ASCharacter>(PawnOwner);
+		CharacterOwner = Cast<ASPlayerCharacter>(PawnOwner);
 	}
 
 	InitializeTransforms();

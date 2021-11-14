@@ -4,7 +4,7 @@
 #include "Components/SInteractionComponent.h"
 #include "Widgets/SInteractionWidgetComponent.h"
 #include "DrawDebugHelpers.h"
-#include "Player/SCharacter.h"
+#include "Player/SPlayerCharacter.h"
 
 
 // Sets default values for this component's properties
@@ -27,7 +27,7 @@ void USInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CharacterOwner = Cast<ASCharacter>(GetOwner());
+	CharacterOwner = Cast<ASPlayerCharacter>(GetOwner());
 }
 
 // Called every frame

@@ -7,7 +7,7 @@
 #include "Animation/AnimInstance.h"
 #include "SFPAnimInstance.generated.h"
 
-class ASCharacter;
+class ASPlayerCharacter;
 
 /** Anim instance class to handle any first person animations. */
 UCLASS()
@@ -34,7 +34,7 @@ public:
 protected:
 	/* The owner of the animation. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Animation)
-	ASCharacter* CharacterOwner;
+	ASPlayerCharacter* CharacterOwner;
 
 	void InitializeTransforms_Delayed();
 	void CalculateRotators(float DeltaSeconds);
