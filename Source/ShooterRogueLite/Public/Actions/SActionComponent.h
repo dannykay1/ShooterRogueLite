@@ -7,6 +7,9 @@
 #include "Components/ActorComponent.h"
 #include "SActionComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTagAdded, FGameplayTag, AddedTag);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTagRemoved, FGameplayTag, RemovedTag);
+
 class USAction;
 
 /**
@@ -33,6 +36,14 @@ protected:
 	/* Actions the component will start with. */
 	UPROPERTY(EditDefaultsOnly, Category = Action)
 	TArray<TSubclassOf<USAction>> DefaultActions;
+
+	/** Bindable event called when action is added. */
+	UPROPERTY(BlueprintAssignable)
+	FOnTagAdded OnTagAdded;
+
+	/** Bindable event called when action is removed. */
+	UPROPERTY(BlueprintAssignable)
+	FOnTagRemoved OnTagRemoved;
 
 public:
 	// Called every frame

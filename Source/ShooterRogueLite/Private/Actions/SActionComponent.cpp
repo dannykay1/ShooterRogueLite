@@ -76,6 +76,12 @@ bool USActionComponent::StartAction(AActor* Instigator, FGameplayTag ActionTag)
 			CancelAbilitiesWithTags(Instigator, Action->CancelAbilitiesWithTag);
 
 			Action->StartAction(Instigator);
+
+			if (ActiveGameplayTags.HasTagExact(ActionTag))
+			{
+				OnTagAdded.Broadcast(ActionTag);
+			}
+
 			return true;
 		}
 	}
@@ -92,6 +98,9 @@ bool USActionComponent::StopAction(AActor* Instigator, FGameplayTag ActionTag)
 			if (Action->GetIsRunning())
 			{
 				Action->StopAction(Instigator);
+
+				OnTagRemoved.Broadcast(ActionTag);
+				
 				return true;
 			}
 		}
@@ -112,6 +121,8 @@ void USActionComponent::CancelAbilitiesWithTags(AActor* Instigator, FGameplayTag
 				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FailedMsg);
 
 				Action->StopAction(Instigator);
+
+				OnTagRemoved.Broadcast(Action->AbilityTag);
 			}
 		}
 	}
