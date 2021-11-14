@@ -2,6 +2,8 @@
 
 
 #include "Attributes/SAttributeComponent.h"
+
+#include "SBlueprintLibrary.h"
 #include "Engine/DataTable.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -22,6 +24,18 @@ void USAttributeComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	InitializeAttributes();
+
+	if (AActor* MyOwner = GetOwner())
+	{
+		MyOwner->OnTakeAnyDamage.AddDynamic(this, &USAttributeComponent::OnTakeAnyDamage);
+		MyOwner->OnTakePointDamage.AddDynamic(this, &USAttributeComponent::OnTakePointDamage);
+		MyOwner->OnTakeRadialDamage.AddDynamic(this, &USAttributeComponent::OnTakeRadialDamage);
+	}
+}
+
+void USAttributeComponent::InitializeAttributes()
+{
 	Attributes.Empty();
 	
 	if (ensure(AttributeTable))
@@ -42,10 +56,45 @@ void USAttributeComponent::BeginPlay()
 	Attributes.Add(DamageTag, FAttribute(DamageTag, 0.f, 0.f));
 }
 
-// Called every frame
-void USAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void USAttributeComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if (DamagedActor)
+	{
+		ModifyHealthAttribute(Damage);
+
+		const FText DisplayText = FText::AsNumber(FMath::Abs(Damage));
+
+		USBlueprintLibrary::SpawnFloatingText(DamagedActor, DamageType->GetClass(), DamagedActor->GetActorLocation(), DisplayText);
+	}
+}
+
+void USAttributeComponent::OnTakePointDamage(AActor* DamagedActor, float Damage, AController* InstigatedBy, FVector HitLocation, UPrimitiveComponent* FHitComponent, FName BoneName,
+	FVector ShotFromDirection, const UDamageType* DamageType, AActor* DamageCauser)
+{
+	if (DamagedActor)
+	{
+		ModifyHealthAttribute(Damage);
+
+		const FText DisplayText = FText::AsNumber(FMath::Abs(Damage));
+
+		USBlueprintLibrary::SpawnFloatingText(DamagedActor, DamageType->GetClass(), HitLocation, DisplayText);
+	}
+}
+
+void USAttributeComponent::OnTakeRadialDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, FVector Origin, FHitResult HitInfo, AController* InstigatedBy,
+	AActor* DamageCauser)
+{
+	if (DamagedActor)
+	{
+		ModifyHealthAttribute(Damage);
+
+		const FText DisplayText = FText::AsNumber(FMath::Abs(Damage));
+
+		// Safety check to make sure HitInfo's Actor is valid.
+		const FVector TextLocation = HitInfo.GetActor() ? HitInfo.GetActor()->GetActorLocation() : DamagedActor->GetActorLocation();
+
+		USBlueprintLibrary::SpawnFloatingText(DamagedActor, DamageType->GetClass(), TextLocation, DisplayText);
+	}
 }
 
 bool USAttributeComponent::GetAttributeByTag(FGameplayTag Tag, FAttribute& Attribute) const

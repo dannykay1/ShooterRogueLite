@@ -33,16 +33,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = Game)
 	static USAttributeComponent* GetAttributeComponent(AActor* Actor);
 
-	UFUNCTION(BlueprintCallable, Category = Game)
-	static bool ApplyDamage(AActor* DamagedActor, float BaseDamage, AController* EventInstigator, AActor* DamageCauser, TSubclassOf<USDamageType> DamageType);
-
-	UFUNCTION(BlueprintCallable, Category = Game)
-	static bool ApplyPointDamage(AActor* DamagedActor, float BaseDamage, FVector HitLocation, AController* EventInstigator, AActor* DamageCauser,
-	                             TSubclassOf<USDamageType> DamageType);
-
 	UFUNCTION(BlueprintPure, Category = Game)
-	static ASHUD* GetHUD(const AActor* Caller);
+	static ASHUD* GetHUD(const AActor* WorldActor);
 
 	UFUNCTION(BlueprintCallable, Category = Game)
-	static void SpawnFloatingText(AActor* Caller, TSubclassOf<USDamageType> DamageType, FVector Location, FText DisplayText);
+	static void SpawnFloatingText(AActor* WorldActor, TSubclassOf<USDamageType> DamageType, FVector Location, FText DisplayText);
 };

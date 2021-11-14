@@ -40,59 +40,14 @@ USAttributeComponent* USBlueprintLibrary::GetAttributeComponent(AActor* Actor)
 	return nullptr;
 }
 
-bool USBlueprintLibrary::ApplyDamage(AActor* DamagedActor, float BaseDamage, AController* EventInstigator, AActor* DamageCauser, TSubclassOf<USDamageType> DamageType)
+ASHUD* USBlueprintLibrary::GetHUD(const AActor* WorldActor)
 {
-	if (!DamagedActor)
-	{
-		return false;
-	}
-
-	if (USAttributeComponent* AttributeComp = GetAttributeComponent(DamagedActor))
-	{
-		BaseDamage = FMath::Abs(BaseDamage);
-
-		AttributeComp->ModifyHealthAttribute(-BaseDamage);
-
-		const FText DisplayText = FText::AsNumber(BaseDamage);
-
-		SpawnFloatingText(DamagedActor, DamageType, DamagedActor->GetActorLocation(), DisplayText);
-		return true;
-	}
-
-	return false;
-}
-
-bool USBlueprintLibrary::ApplyPointDamage(AActor* DamagedActor, float BaseDamage, FVector HitLocation, AController* EventInstigator, AActor* DamageCauser,
-                                          TSubclassOf<USDamageType> DamageType)
-{
-	if (!DamagedActor)
-	{
-		return false;
-	}
-
-	if (USAttributeComponent* AttributeComp = GetAttributeComponent(DamagedActor))
-	{
-		BaseDamage = FMath::Abs(BaseDamage);
-
-		AttributeComp->ModifyHealthAttribute(-BaseDamage);
-
-		const FText DisplayText = FText::AsNumber(BaseDamage);
-
-		SpawnFloatingText(DamagedActor, DamageType, HitLocation, DisplayText);
-		return true;
-	}
-
-	return false;
-}
-
-ASHUD* USBlueprintLibrary::GetHUD(const AActor* Caller)
-{
-	if (!Caller)
+	if (!WorldActor)
 	{
 		return nullptr;
 	}
 
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(Caller->GetWorld(), 0);
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(WorldActor->GetWorld(), 0);
 	if (PlayerController)
 	{
 		return Cast<ASHUD>(PlayerController->GetHUD());
@@ -101,14 +56,14 @@ ASHUD* USBlueprintLibrary::GetHUD(const AActor* Caller)
 	return nullptr;
 }
 
-void USBlueprintLibrary::SpawnFloatingText(AActor* Caller, TSubclassOf<USDamageType> DamageType, FVector Location, FText DisplayText)
+void USBlueprintLibrary::SpawnFloatingText(AActor* WorldActor, TSubclassOf<USDamageType> DamageType, FVector Location, FText DisplayText)
 {
 	if (!DamageType)
 	{
 		return;
 	}
 
-	if (ASHUD* HUD = GetHUD(Caller))
+	if (ASHUD* HUD = GetHUD(WorldActor))
 	{
 		HUD->SpawnFloatingText(DamageType, Location, DisplayText);
 	}

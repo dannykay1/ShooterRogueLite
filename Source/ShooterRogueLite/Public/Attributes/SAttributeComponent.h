@@ -21,10 +21,23 @@ class SHOOTERROGUELITE_API USAttributeComponent : public UActorComponent
 public:
 	// Sets default values for this component's properties
 	USAttributeComponent();
+	void InitializeAttributes();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	UFUNCTION()
+	void OnTakePointDamage(AActor* DamagedActor, float Damage, class AController* InstigatedBy, FVector HitLocation, class UPrimitiveComponent* FHitComponent, FName BoneName,
+	                       FVector ShotFromDirection, const class UDamageType* DamageType, AActor* DamageCauser);
+
+	UFUNCTION()
+	void OnTakeRadialDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, FVector Origin, FHitResult HitInfo, class AController* InstigatedBy,
+	                        AActor* DamageCauser);
+
 
 	UPROPERTY(EditDefaultsOnly, Category = Attribute)
 	UDataTable* AttributeTable;
@@ -36,9 +49,6 @@ protected:
 	TMap<FGameplayTag, FAttribute> Attributes;
 
 public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChanged OnAttributeChanged;
 
