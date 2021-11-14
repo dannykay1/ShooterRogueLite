@@ -6,7 +6,6 @@
 #include "GameFramework/DamageType.h"
 #include "SDamageType.generated.h"
 
-class ASFloatingText;
 class UUserWidget;
 
 /**
@@ -20,7 +19,9 @@ class SHOOTERROGUELITE_API USDamageType : public UDamageType
 
 public:
 	/* Sets default values. */
-	USDamageType();
+	USDamageType()
+		: Color(FColor::White)
+	{}
 
 	/* Widget that handles the damage text behavior. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = FloatingText)
