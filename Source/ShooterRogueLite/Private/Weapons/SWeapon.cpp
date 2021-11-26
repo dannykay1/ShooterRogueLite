@@ -13,6 +13,7 @@ ASWeapon::ASWeapon()
 	MeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	MeshComp->CastShadow = false;
 
+	MuzzleSocketName = "Muzzle";
 	SightSocketName = "Sight";
 	LeftHandSocketName = "LeftHand";
 }
@@ -35,6 +36,14 @@ FTransform ASWeapon::GetLeftHandSocketTransform()
 	return MeshComp
 		? MeshComp->GetSocketTransform(LeftHandSocketName)
 		: GetActorTransform();
+}
+
+void ASWeapon::Equip(ASCharacter* Character)
+{
+}
+
+void ASWeapon::UnEquip(ASCharacter* Character)
+{
 }
 
 void ASWeapon::AddAbilities()

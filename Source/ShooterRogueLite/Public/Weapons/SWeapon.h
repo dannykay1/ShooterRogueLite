@@ -7,6 +7,12 @@
 #include "SWeapon.generated.h"
 
 class USkeletalMeshComponent;
+class UParticleSystem;
+class USoundCue;
+class UCameraShakeBase;
+class UDamageType;
+class USAction;
+class ASCharacter;
 
 UCLASS()
 class SHOOTERROGUELITE_API ASWeapon : public AActor
@@ -26,10 +32,28 @@ protected:
 	USkeletalMeshComponent* MeshComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Sockets)
+	FName MuzzleSocketName;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = Sockets)
 	FName SightSocketName;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Sockets)
 	FName LeftHandSocketName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Weapon)
+	TSubclassOf<UDamageType> DamageType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Effects)
+	TSubclassOf<UCameraShakeBase> CameraShake;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Effects)
+	UParticleSystem* MuzzleEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Effects)
+	USoundCue* MuzzleSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Actions)
+	USAction* FireAction;
 
 public:
 	/* Gets the Sight socket on the weapon mesh, used for player 1st person animations. */
@@ -39,6 +63,12 @@ public:
 	/* Gets the LeftHand socket on the weapon mesh, used for player 1st person animations. */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = Sockets)
 	FTransform GetLeftHandSocketTransform();
+
+	UFUNCTION(BlueprintCallable, Category = Actions)
+	void Equip(ASCharacter* Character);
+
+	UFUNCTION(BlueprintCallable, Category = Actions)
+	void UnEquip(ASCharacter* Character);
 
 	/** Adds the weapon's abilities to the owner. */
 	UFUNCTION(BlueprintCallable, Category = Abilities)

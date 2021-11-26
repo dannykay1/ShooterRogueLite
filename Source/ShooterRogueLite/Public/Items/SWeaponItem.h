@@ -7,6 +7,8 @@
 #include "Framework/SAssetManager.h"
 #include "SWeaponItem.generated.h"
 
+class ASWeapon;
+
 /**
  * 
  */
@@ -21,4 +23,7 @@ public:
 	{
 		ItemType = USAssetManager::WeaponItemType;
 	}
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Weapon)
+	TSubclassOf<ASWeapon> WeaponClass;
 };

@@ -23,7 +23,7 @@ public:
 	USAction();
 
 	/* Initializes the ability with the USActionComponent being passed in. */
-	void Initialize(USActionComponent* NewActionComp);
+	virtual void Initialize(USActionComponent* NewActionComp);
 
 	UFUNCTION(BlueprintCallable, Category = Action)
 	FORCEINLINE USActionComponent* GetOwningComponent() const { return ActionComp; }
@@ -54,7 +54,7 @@ public:
 	FORCEINLINE bool GetIsRunning() const { return bIsRunning; }
 
 	/* Determines if Action can be started. Also calls CheckCost. */
-	bool CanActivateAction(AActor* Instigator);
+	virtual bool CanActivateAction(AActor* Instigator);
 
 	/* Defaults to true. Can check any cost associated with the Action. */
 	UFUNCTION(BlueprintNativeEvent, Category = Action)
